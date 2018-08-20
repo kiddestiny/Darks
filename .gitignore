@@ -103,6 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-tokens
-sql
-data
+tokens/
+sql/
+data/
