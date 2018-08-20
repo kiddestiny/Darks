@@ -3,11 +3,11 @@
 *.so
 *.egg
 *.egg-info
-dist
-build
-data
+dist/
+build/
+data/
 __pycache__/
 .vscode/
 *.pyc
-tokens
-sql
+tokens/
+sql/
