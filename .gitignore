@@ -5,9 +5,9 @@
 *.egg-info
 dist/
 build/
-data/
+data
 __pycache__/
 .vscode/
 *.pyc
-tokens/
-sql/
+tokens
+sql
