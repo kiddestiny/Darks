@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>数据流向图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Fullscreen Landscape on iOS -->
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+    <div id="main"></div>
+    <script src="/js/echarts.min.js"></script>
+    <script src="/js/echarts-gl.js"></script>
+    <link href='/css/mapbox-gl.css' rel='stylesheet' />
+    <script src='/js/mapbox-gl.js'></script>
+    <script src="/js/jquery-3.3.1.js"></script>
+    <script src="/js/capitals.js"></script>
+    <script src="/js/commonUI.js"></script>
+
+    <script type="text/javascript">
+        function getMapBoxToken(){
+                $.ajax({
+                    url: "tokens/mapbox.json",
+                    async: false,
+                    success:function(data){
+                        mapboxgl.accessToken=data.token;
+                    }
+                })
+            }
+        getMapBoxToken()
+
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var linesRoutes = []
+        var regionsData = []
+        option = {
+                    mapbox3D: {
+                        center: [115.1700, 31.391000],
+                        zoom: 5,
+                        pitch: 49,
+                        bearing: 10, 
+                        boxHeight: 50, 
+                        //mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp
+                        // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
+                        // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
+                        // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
+                        style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
+                        // style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
+                        // style: 'mapbox://styles/nocmk2/cjkwe249w34pt2rpa78g1gj9s', //紫白
+                        // style: 'mapbox://styles/nocmk2/cjkwip1zw3a1s2sqnz5ns5qo3',
+                        // style: 'mapbox://styles/nocmk2/cjkxcj15d0fou2so3dw4ckmgj',  // default blue
+                        // style: 'mapbox://styles/nocmk2/cjkxclu2241yp2sqnqo1pd12p',
+                        
+                        postEffect: { 
+                            enable: true,
+                            /*在开启 postEffect 后，WebGL 默认的 MSAA 会无法使用。这时候通过 FXAA 可以廉价方便的解决抗锯齿的问题，FXAA 会对一些场景的边缘部分进行模糊从而解决锯齿的问题，这在一些场景上效果还不错，但是在 echarts-gl 中，需要保证很多文字和线条边缘的锐利清晰，因此 FXAA 并不是那么适用。这时候我们可以通过如下设置更高的devicePixelRatio来使用超采样
+                            var chart = echarts.init(dom, null, {
+                                devicePixelRatio: 2
+                            })但是这种方法对电脑性能有很高的要求，所以更多时候我们建议使用 echarts-gl 中的 temporalSuperSampling，在画面静止后会持续分帧对一个像素多次抖动采样，从而达到超采样抗锯齿的效果。
+                            */
+                            FXAA: {
+                                enable: true
+                            },
+                            SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
+                                enable: true
+                                ,radius: 2
+                            }
+                        },
+                        light: {
+                            main: {
+                                intensity: 0.9,
+                                shadow: true,
+                                shadowQuality: 'high'
+                            },
+                            ambient: {
+                                intensity: 1.
+                            },
+                            ambientCubemap: {
+                                texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
+                                // http://www.hdrlabs.com/sibl/archive.html
+                                exposure: 0.9,
+                                diffuseIntensity: 0.3,
+                                specularIntensity: 0.9
+                            }
+                        }
+                    },
+                    tooltip: {
+                        show: true,
+                        textStyle: {
+                            color: '#fff'
+                        },
+                        trigger: 'item'
+                    },
+                    series: [{
+                        type: 'bar3D',
+                        name: 'hos',
+                        coordinateSystem:'mapbox3D',
+                        data: regionsData,
+                        // color: 'white',
+                        // animation:true,
+                        emphasis:{
+                            itemStyle:{
+                                color:'red',
+                                opacity:1
+                            },
+                            label:{
+                                show:false
+                            }
+
+                        },
+                        // barSize: 4,
+        
+                        // bevelSize: 0.4,
+                        // bevelSmoothness: 4,
+                        
+                        shading: 'color',
+                        realisticMaterial: {
+                            roughness: 0.3,
+                            metalness: 1  
+                        }
+                        // silent: false,
+                        // // instancing: false,
+                        // realisticMaterial: {
+                        //     // detailTexture:''
+                        //     metalness: 1,
+                        //     roughness: 0.1,
+                        // }
+                        // minHeight: 0.1,
+                        // maxHeight: 0.2
+                    },
+                    {
+                        type: 'lines3D',
+                        coordinateSystem: 'mapbox3D',
+                        animation:true,
+                        animationDurationUpdate:900,
+                        zlevel:-9,
+                        effect: {
+                            show: true, // 是否显示尾迹特效，默认不显示
+                            period: 4, // 尾迹特效的周期
+                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 3,  // 尾迹的宽度。
+                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 50,
+                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                        },
+                        blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                        polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+                        data: linesRoutes
+                    }
+                    ,
+                    {
+                        type: 'lines3D',
+                        coordinateSystem: 'mapbox3D',
+                        zlevel:-9,
+                        effect: {
+                            show: true, // 是否显示尾迹特效，默认不显示
+                            period: 4, // 尾迹特效的周期
+                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 5,  // 尾迹的宽度。
+                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 50,
+                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                        },
+                        blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                        polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+                        data: linesRoutes
+                    }
+                    
+                    ]
+                }
+
+        myChart.setOption(option);
+        
+        var mapbox = myChart.getModel().getComponent('mapbox3D').getMapbox();
+        var cities = [
+                    'Beijing',
+                    'Shanghai',
+                    'Shenzhen'
+                ]
+        var current = 0;
+        function flyToNextCity() {
+            // var idx = Math.round(Math.random() * (cities.length - 1));
+            var name = cities[current];
+            var city = capitals.find(function (item) {
+                return item.CapitalName === name;
+            });
+
+            if (isNaN(city.CapitalLatitude) || isNaN(city.CapitalLongitude)) {
+                debugger;
+            }
+            mapbox.flyTo({
+                center: [city.CapitalLongitude, city.CapitalLatitude],
+                zoom: 8,
+                speed: 0.4,
+                curve: 2
+            });
+            current = (current + 1) % (cities.length);
+        }
+        function backtochina(){
+                    mapbox.flyTo({
+                        center: [115.1700, 31.391000],
+                        zoom: 5,
+                        speed: 0.4,
+                        curve: 2
+                    });
+                }
+
+        $.getJSON('data/lines.json', function (mmmmmData) {
+                                var data = mmmmmData.features;
+
+                                var hStep = 300 / (data.length - 1);
+                                var linesRoutes = [];
+                                var i = 0;
+                                for (var x in data) {
+                                    var lnglats = data[x].geometry.coordinates
+                                    linesRoutes.push({
+                                        coords: lnglats,
+                                        lineStyle: {
+                                            opacity: 0.01,
+                                            width: 2,
+                                            color: [0.3, 0.8, 0.8, 0.8]
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    })
+                                }
+                                option.series[1].data = linesRoutes;
+                                myChart.setOption(option);
+
+                            });    
+
+
+        $.getJSON('data/d.json', function (buildingsGeoJSON) {
+
+                            var regionsData = buildingsGeoJSON.map(function (feature) {
+                                return {
+                                    // passes: feature.passes,
+                                    // rejects: feature.rejects,
+                                    name: feature.abbreviation,
+                                    value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
+                                    // ac_amounts: feature.ac_amounts,
+                                    // longitude: feature.longitude,
+                                    // latitude: feature.latitude,
+                                    // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
+                                    itemStyle: {
+                                        color: '#00BFFF',
+                                        opacity: '0.2'
+                                    }
+                                };
+                            });
+
+                            option.series[0].data = regionsData;
+                            // console.log(option)
+                            myChart.setOption(option);
+
+                        });
+
+        function addLineToMap(){
+            // option.series[2].data.shift()
+            option.series[2].data.push({
+                                        coords: [[115.1700+Math.random()*8,31.391000+Math.random()*2],[115.1700-Math.random()*7,31.391000-Math.random()*7]],
+                                        lineStyle: {
+                                            opacity: 0.01,
+                                            width: 2,
+                                            color: [0.8, 0.8, 0.3, 0.8]
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    });
+
+            // myChart.setOption(option,{
+            //     notMerge:false,
+            //     lazyUpdate:true,
+            //     silent:true
+            // });
+
+            myChart.appendData({
+                seriesIndex: 2,
+                data: option.series[2].data
+            });
+                // console.log('heheheheh')
+
+        }
+        
+
+        setInterval(function (){ 
+            addLineToMap()
+           //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
+        }, 29990);
+
+        window.addEventListener('resize', function () {
+            myChart.resize();
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <title>ECharts</title>
+    <!-- 引入 echarts.js http://gallery.echartsjs.com/editor.html?c=xBJpt1AN3f -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/maptalks@0.40.3/dist/maptalks.min.js"></script>
+    <script src="echarts.js"></script>
+    <script src="echarts-gl.js"></script>
+    <script src="jquery-3.3.1.js"></script> -->
+    <script src=https://cdn.jsdelivr.net/npm/maptalks@0.39.3/dist/maptalks.min.js></script>
+    <script src=https://cdn.bootcss.com/echarts/3.8.5/echarts.min.js></script>
+    <script src=http://sandbox.runjs.cn/uploads/rs/492/2mfkzkii/echarts-gl-master.m.js></script>
+    <script src=https://cdn.bootcss.com/jquery/2.0.3/jquery.min.js></script>
+    <style>
+        body {
+            background-color: #19192E;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <!-- <div id="main" style="width: 2560px;height:1440px;"></div>    -->
+    <!-- <div id="main" style="width: 1900px;height:1062px;"></div>  -->
+    <div id="main" style="width: 1900px;height:1024px;"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        var taxiRoutes = []
+        var regionsData = []
+        // $.get('/asset/china.json', function (chinaJson) {
+        //     console.log(chinaJson)
+        //     echarts.registerMap('china', chinaJson);
+        // })
+$.getJSON('data/lines.json', function (mmmmmData) {
+                        var data = mmmmmData.features;
+
+                        var hStep = 300 / (data.length - 1);
+                        var taxiRoutes = [];
+                        var i = 0;
+                        for (var x in data) {
+                            var lnglats = data[x].geometry.coordinates
+                            taxiRoutes.push({
+                                coords: lnglats,
+                                lineStyle: {
+                                    opacity: 0.01,
+                                    width: 0,
+                                    color: [0.8, 0.8, 0.8, 0.8]
+                                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                },
+                                value: 20 // Math.random() * 200
+                            })
+                        }
+        myChart.setOption({
+                    maptalks: {
+                        center: [121.4700, 31.391000],
+                        zoom: 5,
+                        pitch: 25,
+                        baseLayer: {
+                            // http://bl.ocks.org/Xatpy/854297419bd7eb3421d0
+                            // 'urlTemplate' : 'http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
+                            // 'subdomains'  : [0,1,2,3,4,5,6,7,8,9],
+                            // 'attribution' : '&copy; <a href="http://map.baidu.com/">MHFQ</a>'
+                            // 'urlTemplate' : 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                            'urlTemplate': 'http://www.google.cn/maps/vt?pb=!1m5!1m4!1i{z}!2i{x}!3i{y}!4i256!2m3!1e0!2sm!3i342009817!3m9!2sen-US!3sCN!5e18!12m1!1e47!12m3!1e37!2m1!1ssmartmaps!4e0&token=32965',
+                            'subdomains': ['a', 'b', 'c', 'd'],
+                            'attribution': '&copy; meihaofenqi',
+                            'cssFilter': 'sepia(100%) invert(90%)'
+                            //   // 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',     //  
+                            // http://www.google.cn/maps
+                        },
+                        altitudeScale: 20,
+                        postEffect: {
+                            enable: true,
+                            FXAA: {
+                                enable: true
+                            },
+                            SSAO: {
+                                enable: false
+                            }
+                        },
+                        light: {
+
+                            main: {
+                                intensity: 0.9,
+                                shadow: true,
+                                shadowQuality: 'high'
+                            },
+                            ambient: {
+                                intensity: 1.
+                            },
+                            ambientCubemap: {
+                                texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
+                                // http://www.hdrlabs.com/sibl/archive.html
+                                exposure: 0.9,
+                                diffuseIntensity: 0.3,
+                                specularIntensity: 0.9
+                            }
+                        }
+                    },
+                    tooltip: {
+                        show: true,
+                        textStyle: {
+                            color: '#fff'
+                        },
+                        trigger: 'item'
+                    },
+                    series: [
+                    {
+                        type: 'lines3D',
+                        // name: 'lines3D',
+                        // zlevel:-10,
+                        // silent: false,
+                        // lineStyle: {
+                        //     // opacity:1,
+                        //     // width:0,
+                        //     // color:[1,1,1,1]
+                        // },
+                        coordinateSystem: 'maptalks',
+                        effect: {
+                            show: true, // 是否显示尾迹特效，默认不显示
+                            period: 4, // 尾迹特效的周期
+                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 8,  // 尾迹的宽度。
+                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 50,
+                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                        },
+
+                        blendMode: 'lighter',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+
+                        polyline: false,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+
+                        data: {
+                            count: function () {
+                                return taxiRoutes.length;
+                            },
+                            getItem: function (idx) {
+                                return taxiRoutes[idx]
+                            }
+                        }
+                    }
+                    ]
+                });
+        
+        var maptalksIns = myChart.getModel().getComponent('maptalks').getMaptalks();
+        maptalksIns.on('click', function (e) {
+            console.log(e)
+            flyTo(e['coordinate'].x, e['coordinate'].y)
+        })
+        var pitch = maptalksIns.getPitch(), d = 'up', b = 'left', bearing = maptalksIns.getBearing();
+        var paused = false;
+
+        changeView();
+
+        function changeView() {
+            // return 
+            if (maptalksIns.getPitch() > 50) {
+                d = 'up';
+            } else if (maptalksIns.getPitch() < 10) {
+                d = 'down';
+            }
+            if (d === 'down') {
+                pitch = maptalksIns.getPitch() + 0.01;
+            } else {
+                pitch = maptalksIns.getPitch() - 0.01;
+            }
+
+            // console.log(maptalksIns.getPitch())
+            if (maptalksIns.getBearing() > 17) {
+                b = 'right';
+            } else if (maptalksIns.getBearing() < -17) {
+                b = 'left';
+            }
+            if (b === 'left') {
+                bearing = maptalksIns.getBearing() + 0.01
+            } else {
+                bearing = maptalksIns.getBearing() - 0.01
+            }
+
+            maptalksIns.setPitch(pitch);
+            maptalksIns.setBearing(bearing);
+            if (!paused) {
+                requestAnimationFrame(changeView);
+            }
+        }
+
+        function flyTo(longitude, latitude) {
+            paused = true
+            maptalksIns.animateTo({
+                center: [longitude, latitude],
+                zoom: 11,
+                pitch: 70,
+                bearing: 10
+            }, {
+                    duration: 5000,
+                    easing: 'out'
+                }, function (frame) {
+                    if (maptalksIns.getZoom() >= 10 && frame.state.playState === 'finished') {
+                        console.log(maptalksIns.getZoom())
+                        console.log('动画结束')
+                        paused = false
+                        changeView()
+                    }
+                });
+        }
+    });
+
+        $.getJSON('data/d.json', function (buildingsGeoJSON) {
+                            var builds = buildingsGeoJSON.map(function (feature) {
+                                return {
+                                    "type": "Feature",
+                                    "properties": {
+                                        "abbreviation": feature.abbreviation, //Math.random().toString(),
+                                        "passes": feature.passes,
+                                        "rejects": feature.rejects,
+                                        "accepts": feature.accepts,
+                                        "ac_amounts": feature.ac_amounts,
+                                        "name": feature.abbreviation,
+                                        "height": feature.accepts
+                                    },
+                                    "geometry": {
+                                        "type": "Polygon",
+                                        "coordinates": [feature.polygon]
+                                    }
+
+                                }
+
+                            })
+
+
+
+                            var regionsData = builds.map(function (feature) {
+                                return {
+                                    passes: feature.properties.passes,
+                                    rejects: feature.properties.rejects,
+                                    name: feature.properties.abbreviation,
+                                    value: feature.properties.accepts,                // Math.random() * 1,
+                                    height: feature.properties.accepts * 2 || 100,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
+                                    itemStyle: {
+                                        color: 'red',
+                                        borderColor: 'red'
+                                    }
+                                };
+                            });
+
+                            echarts.registerMap('buildings', {
+                                "features": builds
+                            });
+
+
+                            myChart.setOption({
+                                            series: [{type:'lines3D'},{
+                                                type: 'map3D',
+                                                coordinateSystem: 'maptalks',
+                                                map: 'buildings',
+                                                data: regionsData,
+                                                shading: 'realistic',
+                                                // silent: false,
+                                                // instancing: false,
+                                                realisticMaterial: {
+                                                    // detailTexture:''
+                                                    metalness: 1,
+                                                    roughness: 0.1,
+                                                },
+                                                label: {
+                                                    show: false,
+                                                    // distance: 1000,
+                                                    textStyle: {
+                                                        color: '#900', //地图初始化区域字体颜色
+                                                        fontSize: 8,
+                                                        opacity: 0.3,
+                                                        backgroundColor: 'rgba(0,23,11,0)'
+
+                                                    },
+                                                },
+                                            },]
+                                        });
+                        });
+
+// setInterval(function (){ 
+       
+//                                 console.log(taxiRoutes[0])
+
+//                             // echarts.registerMap('buildings');
+                                
+//                             myChart.setOption({
+//                                 series:[{
+//                                         // type: 'map3D',
+//                                         data: taxiRoutes
+//                                     }]
+//                             });
+
+//                             });    
+//         }, 2100);
+
+//         window.addEventListener('resize', function () {
+//             myChart.resize();
+//         });
+
+
+
+    </script>
+</body>
+
+</html>

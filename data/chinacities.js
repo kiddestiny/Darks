@@ -1,0 +1,2 @@
+// http://techslides.com/list-of-countries-and-capitals
+var capitals = [{ "CountryName": "China", "CapitalName": "Shanghai", "CapitalLatitude": "31.4555", "CapitalLongitude": "121.23455", "CountryCode": "CN", "ContinentName": "Asia" }, { "CountryName": "China", "CapitalName": "Shenzhen", "CapitalLatitude": "22.553290", "CapitalLongitude": "113.883080", "CountryCode": "CN", "ContinentName": "Asia" },{ "CountryName": "China", "CapitalName": "Beijing", "CapitalLatitude": "39.916666666666664", "CapitalLongitude": "116.383333", "CountryCode": "CN", "ContinentName": "Asia" }]
