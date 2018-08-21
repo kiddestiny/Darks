@@ -19,31 +19,50 @@ def get_data(sqlname):
     '''
     商户信息读取
     '''
-    sqlpath = os.path.join(os.path.dirname(__file__),'..','sql',sqlname+'.sql')
+    sqlpath = os.path.join(os.path.dirname(__file__),'sql',sqlname+'.sql')
     sqlfile = open(sqlpath, encoding='utf-8').read()
     return pd.read_sql(sqlfile, db.ENGINE_MYSQL_duckchat)
 
 def shop_transform():
     '''
-    商户geo数据构造
+    商户geo数据构造 先从数据库读取数据，根据地址去外部api查地理位置，再计算转换成前端需要的json格式存成文件，返回值是dataframe给后续调用
+    geo的api调用很慢，采用增量模式，已经查过的shop不查
     ''' 
     df_shops = get_data('shop')
     # shops  = 'data/csv/shops.csv'
     # df_shops = pd.read_csv(shops,encoding='utf-8',sep='>')
     # # print(df_shops[['address','城市','company_registered_address']])
 
+    # 和已经存在的数据对比
+    shops_withgeo = 'data/csv/shops_withgeo.csv'
+    df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',',index_col=0)
+
+    # 新增的商户数据   因为在生成shops_withgeo的时候会过滤掉地址为空的数据 因此每次这些数据会在new里面，不用管直接往下执行
+    df_shops_new = df_shops[-df_shops['shop_id'].isin(df_shops_withgeo['shop_id'])]
+    
+    # return 0
+
+
     # 构造地址 采用城市+当前住址或公司地址
-    df_shops['address'] = df_shops['城市'] + df_shops['address']\
-                            .fillna(df_shops['company_registered_address'])\
-                            .fillna(df_shops['name'])\
-                            .fillna(df_shops['城市'])
+    df_shops_new.loc[:,'address'] = df_shops_new['城市'] + df_shops_new['address']\
+                            .fillna(df_shops_new['company_registered_address'])\
+                            .fillna(df_shops_new['name'])\
+                            .fillna(df_shops_new['城市'])
 
     # 地址为空的去掉
-    df_shops = df_shops[-df_shops['address'].isnull()]
+    df_shops_new = df_shops_new[-df_shops_new['address'].isnull()]
 
     # 调用api获取经纬度(读取shops_withgeo.csv判断是否有新增的机构，如果有调用get_geo)
-    df_shops[['longitude','latitude']] = df_shops['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
-    df_shops.to_csv('data/csv/shops_withgeo.csv')
+    df_shops_new[['longitude','latitude']] = df_shops_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+
+    dtypes = df_shops_new.dtypes.combine_first(df_shops_withgeo.dtypes)
+    df_shops_res = df_shops_new.combine_first(df_shops_withgeo)
+    for k, v in dtypes.iteritems():
+        df_shops_res[k] = df_shops_res[k].astype(v)
+    df_shops_res.to_csv('data/csv/shops_withgeo.csv')
+    
+
+    exit(0)
 
     '''
     shops_withgeo 处理成最终的json格式
@@ -99,11 +118,12 @@ def shop_transform():
     # geo = [121.469560, 31.197440]
     with open('data/d.json','w') as f:
         f.write(str(res).replace('\'','"'))
+    return df_shops_withgeo
 
 
 
 if __name__ == '__main__':
-    
+    df_shops_withgeo = shop_transform()
 
     '''
     用户geo  10w+数据 只跑其中的135000:140000 5000左右的数据  接口有并发量限制
@@ -115,9 +135,6 @@ if __name__ == '__main__':
     # df_users = df_users[-df_users['address'].isnull()]
     # df_users[['longitude','latitude']] = df_users[138000:140000]['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
     # df_users.to_csv('asset/users_withgeo.csv')
-
-
-    
     
 
     '''
