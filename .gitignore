@@ -106,3 +106,4 @@ venv.bak/
 tokens/
 sql/
 data/
+db_connects/
