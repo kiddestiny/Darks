@@ -1,6 +1,10 @@
+import os
 import pandas as pd
 import geoapi.geo as g
 import json as json
+from db_connects.db_connects import db 
+import pandas as pd
+db = db()
 
 def get_geo(name):
     try:
@@ -11,46 +15,35 @@ def get_geo(name):
         return(0,0)
     return(longitude, latitude)
 
-'''
-shops.csv 和   读数据库 
-'''
-
-
-
-if __name__ == '__main__':
-
+def get_data(sqlname):
     '''
-    商户geo
+    商户信息读取
     '''
-    # shops  = 'asset/shops.csv'
-    
+    sqlpath = os.path.join(os.path.dirname(__file__),'..','sql',sqlname+'.sql')
+    sqlfile = open(sqlpath, encoding='utf-8').read()
+    return pd.read_sql(sqlfile, db.ENGINE_MYSQL_duckchat)
 
+def shop_transform():
+    '''
+    商户geo数据构造
+    ''' 
+    df_shops = get_data('shop')
+    # shops  = 'data/csv/shops.csv'
     # df_shops = pd.read_csv(shops,encoding='utf-8',sep='>')
-    
     # # print(df_shops[['address','城市','company_registered_address']])
 
-    # df_shops['address'] = df_shops['城市'] + df_shops['address']\
-    #                         .fillna(df_shops['company_registered_address'])\
-    #                         .fillna(df_shops['name'])\
-    #                         .fillna(df_shops['城市'])
+    # 构造地址 采用城市+当前住址或公司地址
+    df_shops['address'] = df_shops['城市'] + df_shops['address']\
+                            .fillna(df_shops['company_registered_address'])\
+                            .fillna(df_shops['name'])\
+                            .fillna(df_shops['城市'])
 
-    # df_shops = df_shops[-df_shops['address'].isnull()]
+    # 地址为空的去掉
+    df_shops = df_shops[-df_shops['address'].isnull()]
 
-    # df_shops[['longitude','latitude']] = df_shops['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
-
-    # df_shops.to_csv('asset/shops_withgeo.csv')
-
-    '''
-    用户geo  10w+数据 只跑其中的135000:140000 5000左右的数据  接口有并发量限制
-    '''
-    # users = 'asset/users.csv'
-    # df_users = pd.read_csv(users,encoding='utf-8',sep='>')
-
-    # df_users['address'] = df_users['area_name']+df_users['current_address'].fillna(df_users['company_address'])
-    # df_users = df_users[-df_users['address'].isnull()]
-    # df_users[['longitude','latitude']] = df_users[138000:140000]['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
-    # df_users.to_csv('asset/users_withgeo.csv')
-
+    # 调用api获取经纬度(读取shops_withgeo.csv判断是否有新增的机构，如果有调用get_geo)
+    df_shops[['longitude','latitude']] = df_shops['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+    df_shops.to_csv('data/csv/shops_withgeo.csv')
 
     '''
     shops_withgeo 处理成最终的json格式
@@ -71,10 +64,6 @@ if __name__ == '__main__':
     '''
     shops_withgeo = 'data/csv/shops_withgeo.csv'
     df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',')
-
-    # df_shops_withgeo[['longitude','latitude','接受数']]
-    # print(df_shops_withgeo)
-    # print( df_shops_withgeo[['longitude','latitude','接受数']] )
 
     def getSquare(geo, length=0.006):
         res = []
@@ -104,20 +93,31 @@ if __name__ == '__main__':
         temp["accepts"] = int(accepts)
         temp["ac_amounts"] = ac_amounts     
         temp["polygon"] = getSquare([longitude, latitude])
-        # print(temp)
         res.append(temp)
-    # print(len(df_shops_withgeo))
-
-    # print(len(df_shops_withgeo[['longitude','latitude','接受数']]))
-
-    # print()
-    # print(df_shops_withgeo[['longitude','latitude','接受数']]) 通过数,拒绝数,接受数,接受金额
-
-
-    df_shops_withgeo[:800][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
+    # 如果加载太慢把数据换成800个 df_shops_withgeo[:800]
+    df_shops_withgeo[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
     # geo = [121.469560, 31.197440]
     with open('data/d.json','w') as f:
         f.write(str(res).replace('\'','"'))
+
+
+
+if __name__ == '__main__':
+    
+
+    '''
+    用户geo  10w+数据 只跑其中的135000:140000 5000左右的数据  接口有并发量限制
+    '''
+    # users = 'asset/users.csv'
+    # df_users = pd.read_csv(users,encoding='utf-8',sep='>')
+
+    # df_users['address'] = df_users['area_name']+df_users['current_address'].fillna(df_users['company_address'])
+    # df_users = df_users[-df_users['address'].isnull()]
+    # df_users[['longitude','latitude']] = df_users[138000:140000]['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+    # df_users.to_csv('asset/users_withgeo.csv')
+
+
+    
     
 
     '''
