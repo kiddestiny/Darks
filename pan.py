@@ -29,40 +29,39 @@ def shop_transform():
     geo的api调用很慢，采用增量模式，已经查过的shop不查
     ''' 
     df_shops = get_data('shop')
+    df_shops = df_shops.set_index('shop_id')
     # shops  = 'data/csv/shops.csv'
     # df_shops = pd.read_csv(shops,encoding='utf-8',sep='>')
     # # print(df_shops[['address','城市','company_registered_address']])
-
-    # 和已经存在的数据对比
+    # 读取历史数据
     shops_withgeo = 'data/csv/shops_withgeo.csv'
-    df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',',index_col=0)
-
+    df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',',index_col='shop_id')
     # 新增的商户数据   因为在生成shops_withgeo的时候会过滤掉地址为空的数据 因此每次这些数据会在new里面，不用管直接往下执行
-    df_shops_new = df_shops[-df_shops['shop_id'].isin(df_shops_withgeo['shop_id'])]
-    
-    # return 0
+    df_shops_new = df_shops.loc[df_shops.index.difference(df_shops_withgeo.index)]
+    # print(df_shops_new)
 
+    # exit()
+    if len(df_shops_new)!=0:
+        # 构造地址 采用城市+当前住址或公司地址
+        df_shops_new.loc[:,'address'] = df_shops_new['城市'] + df_shops_new['address']\
+                                .fillna(df_shops_new['company_registered_address'])\
+                                .fillna(df_shops_new['name'])\
+                                .fillna(df_shops_new['城市'])
+        # 地址为空的去掉
+        df_shops_new = df_shops_new[-df_shops_new['address'].isnull()]
+        # 调用api获取经纬度(读取shops_withgeo.csv判断是否有新增的机构，如果有调用get_geo)
+        df_shops_new[['longitude','latitude']] = df_shops_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
 
-    # 构造地址 采用城市+当前住址或公司地址
-    df_shops_new.loc[:,'address'] = df_shops_new['城市'] + df_shops_new['address']\
-                            .fillna(df_shops_new['company_registered_address'])\
-                            .fillna(df_shops_new['name'])\
-                            .fillna(df_shops_new['城市'])
-
-    # 地址为空的去掉
-    df_shops_new = df_shops_new[-df_shops_new['address'].isnull()]
-
-    # 调用api获取经纬度(读取shops_withgeo.csv判断是否有新增的机构，如果有调用get_geo)
-    df_shops_new[['longitude','latitude']] = df_shops_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
-
-    dtypes = df_shops_new.dtypes.combine_first(df_shops_withgeo.dtypes)
-    df_shops_res = df_shops_new.combine_first(df_shops_withgeo)
-    for k, v in dtypes.iteritems():
-        df_shops_res[k] = df_shops_res[k].astype(v)
+    df_shops_res = pd.concat([df_shops_withgeo,df_shops_new],axis=0)
+    #解决concat字段自动排序问题   https://github.com/pandas-dev/pandas/issues/4588
+    df_shops_res = df_shops_res.reindex(df_shops_withgeo.columns,axis=1)
+    df_shops_res.update(df_shops)
+    # dtypes = df_shops_new.dtypes.combine_first(df_shops_withgeo.dtypes)
+    # df_shops_res = df_shops_new.combine_first(df_shops_withgeo)
+    # for k, v in dtypes.iteritems():
+    #     df_shops_res[k] = df_shops_res[k].astype(v)
     df_shops_res.to_csv('data/csv/shops_withgeo.csv')
-    
-
-    exit(0)
+    # exit()
 
     '''
     shops_withgeo 处理成最终的json格式
@@ -81,9 +80,6 @@ def shop_transform():
     }
             ]
     '''
-    shops_withgeo = 'data/csv/shops_withgeo.csv'
-    df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',')
-
     def getSquare(geo, length=0.006):
         res = []
         # print([geo[0]+length, geo[1]-length])
@@ -114,17 +110,17 @@ def shop_transform():
         temp["polygon"] = getSquare([longitude, latitude])
         res.append(temp)
     # 如果加载太慢把数据换成800个 df_shops_withgeo[:800]
-    df_shops_withgeo[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
+    df_shops_res[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
     # geo = [121.469560, 31.197440]
     with open('data/d.json','w') as f:
         f.write(str(res).replace('\'','"'))
-    return df_shops_withgeo
+    return df_shops_res
 
 
 
 if __name__ == '__main__':
     df_shops_withgeo = shop_transform()
-
+    exit()
     '''
     用户geo  10w+数据 只跑其中的135000:140000 5000左右的数据  接口有并发量限制
     '''
