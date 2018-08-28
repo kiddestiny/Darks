@@ -183,14 +183,14 @@ def user_transform(df_shops_withgeo):
 
     # print( len(df_users_withgeo[-df_users_withgeo['longitude'].isnull()]) )
 
-    lines = df_users_withgeo[-df_users_withgeo['longitude'].isnull()][-df_users_withgeo['longitude'].isnull()][['id','shop_id','address','longitude','latitude']]
+    lines = df_users_withgeo[-df_users_withgeo['longitude'].isnull()][-df_users_withgeo['longitude'].isnull()][['id','shop_id','address','longitude','latitude','datesince']]
     lines = lines[lines['longitude']>1] #把返回（0，0）的过滤掉
 
     merge_res = pd.merge(lines,df_shops_withgeo, how='left', left_on='shop_id',right_index=True,copy=True,suffixes=('_user', '_shop'))
     # merge_res = merge_res[-merge_res['longitude_shop'].isnuindex
     print(merge_res.dtypes)
     
-    merge_res  = merge_res[['id','shop_id','address_user','longitude_user','latitude_user','longitude_shop','latitude_shop']]
+    merge_res  = merge_res[['id','shop_id','address_user','longitude_user','latitude_user','longitude_shop','latitude_shop','datesince']]
 
     features = []
     def construct_users_json(x):
@@ -201,8 +201,13 @@ def user_transform(df_shops_withgeo):
         latitude_user = x[4]
         longitude_shop = x[5]
         latitude_shop = x[6]
+        datesince = x[7]
         coordinates = [[latitude_user,longitude_user],[latitude_shop,longitude_shop]]
-        temp = {"type":"Feature","properties":{"fclass":"secondary","name": address_user,"oneway":"B","bridge":"F","tunnel":"F"},"geometry":{"type":"LineString","coordinates":coordinates}}
+        if datesince==0:
+            linetype = 'Today'
+        else:
+            linetype = 'History'
+        temp = {"type":"Feature","properties":{"fclass":"secondary","name": address_user,"oneway":"B","bridge":"F","tunnel":"F"},"geometry":{"type":linetype,"coordinates":coordinates}}
         features.append(temp)
 
     merge_res.apply(construct_users_json, axis=1)
