@@ -205,6 +205,8 @@ def user_transform(df_shops_withgeo):
         coordinates = [[latitude_user,longitude_user],[latitude_shop,longitude_shop]]
         if datesince==0:
             linetype = 'Today'
+        elif datesince==-1:
+            linetype = 'Yesterday'
         else:
             linetype = 'History'
         temp = {"type":"Feature","properties":{"fclass":"secondary","name": address_user,"oneway":"B","bridge":"F","tunnel":"F"},"geometry":{"type":linetype,"coordinates":coordinates}}

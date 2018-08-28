@@ -5,7 +5,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
-    <title>ECharts</title>
+    <title>数据流向图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!-- 引入 echarts.js http://gallery.echartsjs.com/editor.html?c=xBJpt1AN3f -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/maptalks@0.40.3/dist/maptalks.min.js"></script>
     <script src="echarts.js"></script>
@@ -31,7 +32,9 @@
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     <!-- <div id="main" style="width: 2560px;height:1440px;"></div>    -->
     <!-- <div id="main" style="width: 1900px;height:1062px;"></div>  -->
-    <div id="main" style="width: 1900px;height:1024px;"></div>
+    <div id="main" style="width: 100%;height:1440px;"></div>
+    <script src="/js/capitals.js"></script>
+    <script src="/js/MTcommonUI.js"></script>
     <script type="text/javascript">
         var myChart = echarts.init(document.getElementById('main'));
         var taxiRoutes = []
@@ -41,11 +44,11 @@
         //     echarts.registerMap('china', chinaJson);
         // })
 
-        myChart.setOption({
+        option = {
                     maptalks: {
-                        center: [121.4700, 31.391000],
-                        zoom: 5,
-                        pitch: 25,
+                        center: [113.3700, 29.351000],
+                        zoom: 6.6,
+                        pitch: 35,
                         baseLayer: {
                             // http://bl.ocks.org/Xatpy/854297419bd7eb3421d0
                             // 'urlTemplate' : 'http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
@@ -122,8 +125,43 @@
                     },
                     {
                         type: 'lines3D',
-                        // name: 'lines3D',
+                        name: 'History',
                         // zlevel:-10,
+                        // silent: false,
+                        // lineStyle: {
+                        //     // opacity:1,
+                        //     // width:0,
+                        //     // color:[1,1,1,1]
+                        // },
+                        coordinateSystem: 'maptalks',
+                        effect: {
+                            show: true, // 是否显示尾迹特效，默认不显示
+                            period: 5, // 尾迹特效的周期
+                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 3,  // 尾迹的宽度。
+                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 40,
+                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                        },
+
+                        blendMode: 'lighter',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+
+                        polyline: false,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+
+                        data: {
+                            count: function () {
+                                return taxiRoutes.length;
+                            },
+                            getItem: function (idx) {
+                                return taxiRoutes[idx]
+                            }
+                        }
+                    },
+                    {
+                        type: 'lines3D',
+                        name: 'Today',
+                        // zlevel:-9,
                         // silent: false,
                         // lineStyle: {
                         //     // opacity:1,
@@ -135,10 +173,10 @@
                             show: true, // 是否显示尾迹特效，默认不显示
                             period: 4, // 尾迹特效的周期
                             // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 8,  // 尾迹的宽度。
-                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 50,
+                            trailWidth: 3,  // 尾迹的宽度。
+                            trailLength: 0.7,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 60,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
 
@@ -156,8 +194,8 @@
                         }
                     }
                     ]
-                });
-        
+                }
+        myChart.setOption(option);
         var maptalksIns = myChart.getModel().getComponent('maptalks').getMaptalks();
         maptalksIns.on('click', function (e) {
             console.log(e)
@@ -176,21 +214,21 @@
                 d = 'down';
             }
             if (d === 'down') {
-                pitch = maptalksIns.getPitch() + 0.01;
+                pitch = maptalksIns.getPitch() + 0.005;
             } else {
-                pitch = maptalksIns.getPitch() - 0.01;
+                pitch = maptalksIns.getPitch() - 0.005;
             }
 
             // console.log(maptalksIns.getPitch())
-            if (maptalksIns.getBearing() > 17) {
+            if (maptalksIns.getBearing() > 10) {
                 b = 'right';
-            } else if (maptalksIns.getBearing() < -17) {
+            } else if (maptalksIns.getBearing() < -10) {
                 b = 'left';
             }
             if (b === 'left') {
-                bearing = maptalksIns.getBearing() + 0.01
+                bearing = maptalksIns.getBearing() + 0.005
             } else {
-                bearing = maptalksIns.getBearing() - 0.01
+                bearing = maptalksIns.getBearing() - 0.005
             }
 
             maptalksIns.setPitch(pitch);
@@ -204,9 +242,9 @@
             paused = true
             maptalksIns.animateTo({
                 center: [longitude, latitude],
-                zoom: 11,
+                zoom: 9,
                 pitch: 70,
-                bearing: 10
+                bearing: 0
             }, {
                     duration: 5000,
                     easing: 'out'
@@ -220,7 +258,47 @@
                 });
         }
 
+        function backtochina(){
+            paused = true
+            maptalksIns.animateTo({
+                center: [113.3700, 29.351000],
+                zoom: 6.6,
+                pitch: 35,
+                bearing: 0
+            }, {
+                    duration: 5000,
+                    easing: 'out'
+                }, function (frame) {
+                    if (maptalksIns.getZoom() >= 10 && frame.state.playState === 'finished') {
+                        console.log(maptalksIns.getZoom())
+                        console.log('动画结束')
+                        paused = false
+                        changeView()
+                    }
+                });
+            }
 
+        var cities = [
+                    'Beijing',
+                    'Shanghai',
+                    'Shenzhen'
+                ]
+        var current = 0;
+        function flyToNextCity() {
+            // var idx = Math.round(Math.random() * (cities.length - 1));
+            var name = cities[current];
+            var city = capitals.find(function (item) {
+                return item.CapitalName === name;
+            });
+
+            if (isNaN(city.CapitalLatitude) || isNaN(city.CapitalLongitude)) {
+                debugger;
+            }
+            flyTo(city.CapitalLongitude, city.CapitalLatitude)
+            current = (current + 1) % (cities.length);
+        }
+
+        
         $.getJSON('data/d.json', function (buildingsGeoJSON) {
                             var builds = buildingsGeoJSON.map(function (feature) {
                                 return {
@@ -272,54 +350,88 @@
                             });
                         });
 
-setInterval(function (){ 
+// setInterval(function (){ 
         $.getJSON('data/lines.json', function (mmmmmData) {
-                                var data = mmmmmData.features;
+                            var data = mmmmmData.features;
 
-                                var hStep = 300 / (data.length - 1);
-                                var taxiRoutes = [];
-                                var i = 0;
-                                for (var x in data) {
-                                    var lnglats = data[x].geometry.coordinates
-                                    taxiRoutes.push({
-                                        coords: lnglats,
+                var hStep = 300 / (data.length - 1);
+                var linesRoutes_today = [];
+                var linesRoutes_his = [];
+                var i = 0;
+                for (var x in data) {
+                    var lnglats = data[x].geometry.coordinates
+
+                    if (data[x].geometry.type=='Today'){
+                    color= [0.8, 0.8, 0.3, 1]  //金色
+                    linesRoutes_today.push({
+                        coords: lnglats,
+                        lineStyle: {
+                            opacity: 0.02,
+                            width: 0.1,
+                            color: color,  // 蓝绿
+                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                        },
+                        value: 20 // Math.random() * 200
+                    })
+                    }else{
+                    color=[0.8, 0.8, 0.8, 1]  // 蓝绿 
+                    linesRoutes_his.push({
+                        coords: lnglats,
+                        lineStyle: {
+                            opacity: 0.02,
+                            width: 0,
+                            color: color  // 蓝绿
+                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                        },
+                        value: 20 // Math.random() * 200
+                    })
+                    }
+                    
+                }
+                option.series[2].data = linesRoutes_today;
+                option.series[1].data = linesRoutes_his;
+                myChart.setOption(option);
+
+                            });    
+        // }, 2990);
+
+        function addLineToMap(){
+            // option.series[2].data.shift()
+            option.series[2].data.push({
+                                        coords: [[115.1700+Math.random()*8,31.391000+Math.random()*2],[115.1700-Math.random()*7,31.391000-Math.random()*7]],
                                         lineStyle: {
                                             opacity: 0.01,
-                                            width: 0,
-                                            color: [0.8, 0.8, 0.8, 0.8]
+                                            width: 2,
+                                            color: [0.8, 0.5, 0.3, 0.8]   //金色
                                             // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
                                         },
                                         value: 20 // Math.random() * 200
-                                    })
-                                }
-                                console.log(taxiRoutes[0])
+                                    });
 
-                                myChart.setOption({
-                                    series:[{type:'map3D'},{
-                                            type: 'lines3D',
-                                            // // coordinateSystem: 'maptalks',
-                                            // effect: {
-                                            //         show: true, // 是否显示尾迹特效，默认不显示
-                                            //         period: 4, // 尾迹特效的周期
-                                            //         // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                                            //         trailWidth: 8,  // 尾迹的宽度。
-                                            //         trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                                            //         trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
-                                            //         spotIntensity: 50,
-                                            //         // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
-                                            //     },
-                                            // blendMode: 'lighter',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
-                                            // polyline: false,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                                            data: taxiRoutes
-                                        }]
-                                });
+            // myChart.setOption(option,{
+            //     notMerge:false,
+            //     lazyUpdate:true,
+            //     silent:true
+            // });
 
-                            });    
-        }, 2990);
+            myChart.appendData({
+                seriesIndex: 2,
+                data: option.series[2].data
+            });
+                // console.log('heheheheh')
 
-        window.addEventListener('resize', function () {
-            myChart.resize();
-        });
+        }
+
+        setInterval(function (){ 
+            addLineToMap()
+           //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
+        }, 1999);
+
+        // window.addEventListener('resize', function () {
+        //     myChart.resize();
+        // });
 
 
 

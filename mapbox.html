@@ -5,13 +5,14 @@
     <title>数据流向图</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Fullscreen Landscape on iOS -->
+    <link href='/css/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
     <div id="main"></div>
     <script src="/js/echarts.min.js"></script>
     <script src="/js/echarts-gl.js"></script>
-    <link href='/css/mapbox-gl.css' rel='stylesheet' />
+    
     <script src='/js/mapbox-gl.js'></script>
     <script src="/js/jquery-3.3.1.js"></script>
     <script src="/js/capitals.js"></script>
@@ -44,8 +45,8 @@
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
                         // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
                         // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
-                        // style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
-                        style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
+                        style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
+                        // style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
                         // style: 'mapbox://styles/nocmk2/cjkwe249w34pt2rpa78g1gj9s', //紫白
                         // style: 'mapbox://styles/nocmk2/cjkwip1zw3a1s2sqnz5ns5qo3',
                         // style: 'mapbox://styles/nocmk2/cjkxcj15d0fou2so3dw4ckmgj',  // default blue
@@ -63,7 +64,7 @@
                             },
                             SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
                                 enable: true
-                                ,radius: 2
+                                // ,radius: 2
                             }
                         },
                         light: {
@@ -91,11 +92,12 @@
                         },
                         trigger: 'item'
                     },
-                    series: [{
+                    series: [
+                        {
                         type: 'bar3D',
                         name: 'hos',
                         coordinateSystem:'mapbox3D',
-                        data: regionsData,
+                        data: [],
                         // color: 'white',
                         // animation:true,
                         emphasis:{
@@ -110,18 +112,19 @@
                         },
                         // barSize: 4,
         
-                        // bevelSize: 0.4,
-                        // bevelSmoothness: 4,
+                        bevelSize: 0.4,  // 柱子的倒角尺寸。支持设置为从 0 到 1 的值。默认为 0，即没有倒角。
+                        bevelSmoothness: 4, //柱子倒角的光滑/圆润度，数值越大越光滑/圆润。
                         
-                        shading: 'color',
+                        shading: 'color',  //color
                         realisticMaterial: {
-                            roughness: 0.3,
+                            roughnessAdjust:0.5,
+                            roughness: 0.1,
                             metalness: 1  
                         }
                         // silent: false,
                         // // instancing: false,
                         // ,realisticMaterial: {
-                        //     // detailTexture:''
+                        //     detailTexture:'',
                         //     metalness: 1,
                         //     roughness: 0.1,
                         // }
@@ -144,7 +147,7 @@
                             spotIntensity: 30,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
-                        blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                        // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
                         data: linesRoutes
                     }
@@ -163,7 +166,7 @@
                             spotIntensity: 50,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
-                        blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                        // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
                         data: linesRoutes
                     }
@@ -224,14 +227,14 @@
                                         lineStyle: {
                                             opacity: 0.02,
                                             width: 0.1,
-                                            color: color,  // 蓝绿
+                                            color: color,  // 金色
                                             // color: [0.8, 0.8, 0.3, 0.8]   //金色
                                             // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
                                         },
                                         value: 20 // Math.random() * 200
                                     })
-                                    }else{
-                                       color=[0.3, 0.8, 0.8, 0.8]  // 蓝绿 
+                                    }else if(data[x].geometry.type=='Yesterday'){
+                                       color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
                                        linesRoutes_his.push({
                                         coords: lnglats,
                                         lineStyle: {
@@ -253,30 +256,30 @@
                             });    
 
 
-        $.getJSON('data/d.json', function (buildingsGeoJSON) {
+        // $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
-                            var regionsData = buildingsGeoJSON.map(function (feature) {
-                                return {
-                                    // passes: feature.passes,
-                                    // rejects: feature.rejects,
-                                    name: feature.abbreviation,
-                                    value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
-                                    // ac_amounts: feature.ac_amounts,
-                                    // longitude: feature.longitude,
-                                    // latitude: feature.latitude,
-                                    // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
-                                    itemStyle: {
-                                        color: '#00BFFF',
-                                        opacity: '0.2'
-                                    }
-                                };
-                            });
+        //                     var regionsData = buildingsGeoJSON.map(function (feature) {
+        //                         return {
+        //                             // passes: feature.passes,
+        //                             // rejects: feature.rejects,
+        //                             name: feature.abbreviation,
+        //                             value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
+        //                             // ac_amounts: feature.ac_amounts,
+        //                             // longitude: feature.longitude,
+        //                             // latitude: feature.latitude,
+        //                             // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
+        //                             itemStyle: {
+        //                                 color: '#00BFFF',
+        //                                 opacity: 0.1
+        //                             }
+        //                         };
+        //                     });
 
-                            option.series[0].data = regionsData;
-                            // console.log(option)
-                            myChart.setOption(option);
+        //                     option.series[0].data = regionsData;
+        //                     console.log(option)
+        //                     myChart.setOption(option);
 
-                        });
+        //                 });
 
         // function addLineToMap(){
         //     // option.series[2].data.shift()
@@ -311,9 +314,9 @@
         //    //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
         // }, 29990);
 
-        window.addEventListener('resize', function () {
-            myChart.resize();
-        });
+        // window.addEventListener('resize', function () {
+        //     myChart.resize();
+        // });
 
     </script>
 </body>
