@@ -211,17 +211,15 @@
                                 var data = mmmmmData.features;
 
                                 var hStep = 300 / (data.length - 1);
-                                var linesRoutes = [];
+                                var linesRoutes_today = [];
+                                var linesRoutes_his = [];
                                 var i = 0;
                                 for (var x in data) {
                                     var lnglats = data[x].geometry.coordinates
 
                                     if (data[x].geometry.type=='Today'){
                                       color= [0.8, 0.8, 0.3, 0.8]  //金色
-                                    }else{
-                                       color=[0.3, 0.8, 0.8, 0.8]  // 蓝绿 
-                                    }
-                                    linesRoutes.push({
+                                      linesRoutes_today.push({
                                         coords: lnglats,
                                         lineStyle: {
                                             opacity: 0.02,
@@ -232,8 +230,24 @@
                                         },
                                         value: 20 // Math.random() * 200
                                     })
+                                    }else{
+                                       color=[0.3, 0.8, 0.8, 0.8]  // 蓝绿 
+                                       linesRoutes_his.push({
+                                        coords: lnglats,
+                                        lineStyle: {
+                                            opacity: 0.02,
+                                            width: 0.1,
+                                            color: color  // 蓝绿
+                                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    })
+                                    }
+                                    
                                 }
-                                option.series[1].data = linesRoutes;
+                                option.series[2].data = linesRoutes_today;
+                                option.series[1].data = linesRoutes_his;
                                 myChart.setOption(option);
 
                             });    
@@ -292,10 +306,10 @@
         // }
         
 
-        setInterval(function (){ 
-            addLineToMap()
-           //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
-        }, 29990);
+        // setInterval(function (){ 
+        //     addLineToMap()
+        //    //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
+        // }, 29990);
 
         window.addEventListener('resize', function () {
             myChart.resize();

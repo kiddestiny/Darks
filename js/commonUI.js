@@ -55,6 +55,20 @@
         cursor: pointer;
     `;
 
+    var btntogglehis = document.createElement('button');
+    btntogglehis.innerHTML = '历史数据';
+    btntogglehis.style.cssText = `
+        position:absolute;
+        left: 400px;
+        bottom: 10px;
+        background: rgb(42, 64, 173);
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        z-index: 1000000;
+        cursor: pointer;
+    `;
+
     btn.onclick = function () {
         (typeof myChart !== 'undefined') && myChart.dispose();
         (typeof chart !== 'undefined') && chart.dispose();
@@ -89,8 +103,27 @@
         backtochina()
     }
 
+    hisdata = []
+    btntogglehis.onclick = function () {
+            console.log(hisdata)
+            if(hisdata.length==0){       
+                hisdata = option.series[1].data
+                option.series[1].data = []
+                console.log('123123')
+             }else{
+                option.series[1].data = hisdata
+                hisdata = []
+             }
+                myChart.setOption(option,{
+                    notMerge:false,
+                    lazyUpdate:true,
+                    silent:true
+                });
+    }
+
     document.body.appendChild(btn);
     document.body.appendChild(btntheme);
     document.body.appendChild(btncity);
     document.body.appendChild(btnchina);
+    document.body.appendChild(btntogglehis);
 })();
