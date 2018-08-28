@@ -4,7 +4,26 @@ import geoapi.geo as g
 import json as json
 from db_connects.db_connects import db 
 import pandas as pd
+from math import radians, cos, sin, asin, sqrt
 db = db()
+
+
+def haversine(lon1, lat1, lon2, lat2): # 经度1，纬度1，经度2，纬度2 （十进制度数）
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # 将十进制度数转化为弧度
+    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
+ 
+    # haversine公式
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    c = 2 * asin(sqrt(a)) 
+    r = 6371 # 地球平均半径，单位为公里
+    return c * r * 1000
+
 
 def get_geo(name):
     try:
@@ -15,13 +34,14 @@ def get_geo(name):
         return(0,0)
     return(longitude, latitude)
 
-def get_data(sqlname):
+def get_data(sqlname,id=0):
     '''
     商户信息读取
     '''
     sqlpath = os.path.join(os.path.dirname(__file__),'sql',sqlname+'.sql')
     sqlfile = open(sqlpath, encoding='utf-8').read()
-    return pd.read_sql(sqlfile, db.ENGINE_MYSQL_duckchat)
+    print(sqlfile.format(id))
+    return pd.read_sql(sqlfile.format(id), db.ENGINE_MYSQL_duckchat)
 
 def shop_transform():
     '''
@@ -117,22 +137,32 @@ def shop_transform():
     return df_shops_res
 
 
-
-if __name__ == '__main__':
-    df_shops_withgeo = shop_transform()
-    exit()
+def user_transform(df_shops_withgeo):
     '''
-    用户geo  10w+数据 只跑其中的135000:140000 5000左右的数据  接口有并发量限制
-    '''
-    # users = 'asset/users.csv'
-    # df_users = pd.read_csv(users,encoding='utf-8',sep='>')
-
-    # df_users['address'] = df_users['area_name']+df_users['current_address'].fillna(df_users['company_address'])
-    # df_users = df_users[-df_users['address'].isnull()]
-    # df_users[['longitude','latitude']] = df_users[138000:140000]['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
-    # df_users.to_csv('asset/users_withgeo.csv')
-    
-
+    用户申请geo数据构造 先从数据库读取数据，根据地址去外部api查地理位置，再计算转换成前端需要的json格式存成文件，返回值是dataframe给后续调用
+    geo的api调用很慢，采用增量模式，已经查过的用户不查
+    ''' 
+    # 读取历史数据
+    users_withgeo = 'data/csv/users_withgeo.csv'
+    df_users_withgeo = pd.read_csv(users_withgeo, encoding='utf-8', sep=',',index_col='id')
+    df_users = get_data('user',df_users_withgeo.index.max())
+    df_users_new = df_users.set_index('id')   # debit_id
+    # 全量初始化
+    # df_users.loc[:,'address'] = (df_users['area_name']+df_users['current_address'].fillna(df_users['company_address'])).fillna(df_users['idcard_area_name'])
+    # df_users[['longitude','latitude']] = df_users[:600]['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+    # df_users.to_csv('data/csv/users_withgeo.csv')
+    # exit()
+    # df_users_new = df_users.loc[df_users.index.difference(df_users_withgeo.index)]
+    if len(df_users_new)!=0:
+        # 地址用填写的城市名称+当前地址，如果为空用公司地址，都为空用身份证省所在省会城市
+        df_users_new.loc[:,'address'] = (df_users_new['area_name']+df_users_new['current_address'].fillna(df_users_new['company_address'])).fillna(df_users_new['idcard_area_name'])
+        df_users_new[['longitude','latitude']] = df_users_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+        print('new')
+    df_users_res = pd.concat([df_users_new,df_users_withgeo], axis=0)
+    #解决concat字段自动排序问题   https://github.com/pandas-dev/pandas/issues/4588
+    df_users_res = df_users_res.reindex(df_users_withgeo.columns,axis=1)
+    # df_users_res.update(df_users)
+    df_users_res.to_csv('data/csv/users_withgeo.csv')
     '''
     users_withgeo 处理成最终的json格式
     {
@@ -154,10 +184,10 @@ if __name__ == '__main__':
     # print( len(df_users_withgeo[-df_users_withgeo['longitude'].isnull()]) )
 
     lines = df_users_withgeo[-df_users_withgeo['longitude'].isnull()][-df_users_withgeo['longitude'].isnull()][['id','shop_id','address','longitude','latitude']]
-    lines = lines[lines['longitude']>1]
+    lines = lines[lines['longitude']>1] #把返回（0，0）的过滤掉
 
-    merge_res = pd.merge(lines,df_shops_withgeo, how='left', left_on='shop_id', right_on='shop_id',left_index=False, right_index=False,copy=True,suffixes=('_user', '_shop'))
-    merge_res = merge_res[-merge_res['longitude_shop'].isnull()]
+    merge_res = pd.merge(lines,df_shops_withgeo, how='left', left_on='shop_id',right_index=True,copy=True,suffixes=('_user', '_shop'))
+    # merge_res = merge_res[-merge_res['longitude_shop'].isnuindex
     print(merge_res.dtypes)
     
     merge_res  = merge_res[['id','shop_id','address_user','longitude_user','latitude_user','longitude_shop','latitude_shop']]
@@ -183,7 +213,16 @@ if __name__ == '__main__':
         }
 
     with open('data/lines.json','w') as f:
-        f.write(str(usres).replace('\'','"'))
+        f.write(str(usres).replace('\'','"'))    
 
-    # print(lines)
+    return df_users_res
+
+
+
+
+if __name__ == '__main__':
+    # gg = get_geo('广东省清远市英城街道富域城8栋701')
+    # print(gg)
+    df_shops_withgeo = shop_transform()
+    user_transform(df_shops_withgeo)
 

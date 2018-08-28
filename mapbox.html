@@ -37,15 +37,15 @@
                     mapbox3D: {
                         center: [115.1700, 31.391000],
                         zoom: 5,
-                        pitch: 49,
-                        bearing: 10, 
-                        boxHeight: 50, 
+                        pitch: 65,
+                        bearing: 5, 
+                        boxHeight: 25,   // bar的高度比例
                         //mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
                         // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
                         // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
-                        style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
-                        // style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
+                        // style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
+                        style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
                         // style: 'mapbox://styles/nocmk2/cjkwe249w34pt2rpa78g1gj9s', //紫白
                         // style: 'mapbox://styles/nocmk2/cjkwip1zw3a1s2sqnz5ns5qo3',
                         // style: 'mapbox://styles/nocmk2/cjkxcj15d0fou2so3dw4ckmgj',  // default blue
@@ -120,7 +120,7 @@
                         }
                         // silent: false,
                         // // instancing: false,
-                        // realisticMaterial: {
+                        // ,realisticMaterial: {
                         //     // detailTexture:''
                         //     metalness: 1,
                         //     roughness: 0.1,
@@ -128,7 +128,7 @@
                         // minHeight: 0.1,
                         // maxHeight: 0.2
                     },
-                    {
+                    { //历史 
                         type: 'lines3D',
                         coordinateSystem: 'mapbox3D',
                         animation:true,
@@ -136,12 +136,12 @@
                         zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 4, // 尾迹特效的周期
-                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            period: 0.1, // 尾迹特效的周期
+                            constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 6,  // 尾迹的宽度。
+                            trailLength: 0.4,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
                             trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 50,
+                            spotIntensity: 30,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
                         blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
@@ -149,16 +149,16 @@
                         data: linesRoutes
                     }
                     ,
-                    {
+                    { //当日
                         type: 'lines3D',
                         coordinateSystem: 'mapbox3D',
                         zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 4, // 尾迹特效的周期
-                            // constantSpeed: 2,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 5,  // 尾迹的宽度。
-                            trailLength: 0.5,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            period: 0.1, // 尾迹特效的周期
+                            constantSpeed: 8,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 6,  // 尾迹的宽度。
+                            trailLength: 0.4,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
                             trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
                             spotIntensity: 50,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
@@ -219,7 +219,7 @@
                                         coords: lnglats,
                                         lineStyle: {
                                             opacity: 0.01,
-                                            width: 2,
+                                            width: 1.3,
                                             color: [0.3, 0.8, 0.8, 0.8]
                                             // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
                                         },
