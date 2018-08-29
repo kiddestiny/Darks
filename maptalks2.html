@@ -361,33 +361,33 @@
                 for (var x in data) {
                     var lnglats = data[x].geometry.coordinates
 
-                    if (data[x].geometry.type=='Today'){
-                    color= [0.8, 0.8, 0.3, 1]  //金色
-                    linesRoutes_today.push({
-                        coords: lnglats,
-                        lineStyle: {
-                            opacity: 0.02,
-                            width: 0.1,
-                            color: color,  // 蓝绿
-                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                        },
-                        value: 20 // Math.random() * 200
-                    })
-                    }else{
-                    color=[0.8, 0.8, 0.8, 1]  // 蓝绿 
-                    linesRoutes_his.push({
-                        coords: lnglats,
-                        lineStyle: {
-                            opacity: 0.02,
-                            width: 0,
-                            color: color  // 蓝绿
-                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                        },
-                        value: 20 // Math.random() * 200
-                    })
-                    }
+                     if (data[x].geometry.type=='Today'){
+                                      color= [0.8, 0.8, 0.3, 0.8]  //金色
+                                      linesRoutes_today.push({
+                                        coords: lnglats,
+                                        lineStyle: {
+                                            opacity: 0.02,
+                                            width: 0.1,
+                                            color: color,  // 金色
+                                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    })
+                                    }else if(data[x].geometry.type=='Yesterday'){
+                                       color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
+                                       linesRoutes_his.push({
+                                        coords: lnglats,
+                                        lineStyle: {
+                                            opacity: 0.02,
+                                            width: 0.1,
+                                            color: color  // 蓝绿
+                                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    })
+                                    }
                     
                 }
                 option.series[2].data = linesRoutes_today;

@@ -136,15 +136,15 @@
                         coordinateSystem: 'mapbox3D',
                         animation:true,
                         animationDurationUpdate:900,
-                        zlevel:-9,
+                        // zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 0.1, // 尾迹特效的周期
-                            constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 6,  // 尾迹的宽度。
-                            trailLength: 0.4,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 30,
+                            period: 5, // 尾迹特效的周期
+                            // constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 3,  // 尾迹的宽度。
+                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 40,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
@@ -155,15 +155,15 @@
                     { //当日
                         type: 'lines3D',
                         coordinateSystem: 'mapbox3D',
-                        zlevel:-9,
+                        // zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 0.1, // 尾迹特效的周期
-                            constantSpeed: 8,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 6,  // 尾迹的宽度。
-                            trailLength: 0.4,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.3,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 50,
+                            period: 5, // 尾迹特效的周期
+                            // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                            trailWidth: 3,  // 尾迹的宽度。
+                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 80,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
@@ -256,30 +256,29 @@
                             });    
 
 
-        // $.getJSON('data/d.json', function (buildingsGeoJSON) {
+        $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
-        //                     var regionsData = buildingsGeoJSON.map(function (feature) {
-        //                         return {
-        //                             // passes: feature.passes,
-        //                             // rejects: feature.rejects,
-        //                             name: feature.abbreviation,
-        //                             value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
-        //                             // ac_amounts: feature.ac_amounts,
-        //                             // longitude: feature.longitude,
-        //                             // latitude: feature.latitude,
-        //                             // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
-        //                             itemStyle: {
-        //                                 color: '#00BFFF',
-        //                                 opacity: 0.1
-        //                             }
-        //                         };
-        //                     });
+                            var regionsData = buildingsGeoJSON.map(function (feature) {
+                                return {
+                                    // passes: feature.passes,
+                                    // rejects: feature.rejects,
+                                    name: feature.abbreviation,
+                                    value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
+                                    // ac_amounts: feature.ac_amounts,
+                                    // longitude: feature.longitude,
+                                    // latitude: feature.latitude,
+                                    // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
+                                    itemStyle: {
+                                        color: '#00BFFF',
+                                        opacity: 0.01
+                                    }
+                                };
+                            });
 
-        //                     option.series[0].data = regionsData;
-        //                     console.log(option)
-        //                     myChart.setOption(option);
-
-        //                 });
+                            option.series[0].data = regionsData;
+                            console.log(option)
+                            myChart.setOption(option);
+                        });
 
         // function addLineToMap(){
         //     // option.series[2].data.shift()

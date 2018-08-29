@@ -5,6 +5,7 @@ import json as json
 from db_connects.db_connects import db 
 import pandas as pd
 from math import radians, cos, sin, asin, sqrt
+from datetime import datetime
 db = db()
 
 
@@ -161,6 +162,12 @@ def user_transform(df_shops_withgeo):
     df_users_res = pd.concat([df_users_new,df_users_withgeo], axis=0)
     #解决concat字段自动排序问题   https://github.com/pandas-dev/pandas/issues/4588
     df_users_res = df_users_res.reindex(df_users_withgeo.columns,axis=1)
+
+    # 计算datesince final_input_time:2018-08-28 17:11:12
+    df_users_res['final_input_time'] = pd.to_datetime(df_users_res['final_input_time'])
+    df_users_res.loc[:,'datesince'] = df_users_res['final_input_time'].apply(lambda x: (x.date() - datetime.today().date()).days)
+    
+    
     # df_users_res.update(df_users)
     df_users_res.to_csv('data/csv/users_withgeo.csv')
     '''
