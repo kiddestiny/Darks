@@ -1,9 +1,15 @@
 #-*- coding: utf8 -*-
-
+import os
 import requests
 import asyncio
 import aiohttp
 import json
+
+
+
+CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
+print("-----------")
+print(os.path.join(CURR_PATH,'tokens/baidugeo.json'))
 
 class GeoBaidu(object):
     '''
@@ -11,7 +17,7 @@ class GeoBaidu(object):
     '''
     def __init__(self):
         ak = ''
-        with open('tokens/baidugeo.json','r') as f:
+        with open(os.path.join(CURR_PATH,'../tokens/baidugeo.json'),'r') as f:
             ak = f.readline()
             ak = json.loads(ak)['token']
         self.values = {
@@ -38,7 +44,7 @@ class GeoQQ(object):
     '''
     def __init__(self):
         key = ''
-        with open('tokens/qqgeo.json','r') as f:
+        with open(os.path.join(CURR_PATH,'../tokens/qqgeo.json'),'r') as f:
             key = f.readline()
             key = json.loads(key)['token']
         self.values = {

@@ -36,8 +36,8 @@
         var regionsData = []
         option = {
                     mapbox3D: {
-                        center: [115.1700, 31.391000],
-                        zoom: 5,
+                        center: [108.3700, 29.351000],
+                        zoom: 6,
                         pitch: 65,
                         bearing: 5, 
                         boxHeight: 25,   // bar的高度比例
@@ -60,10 +60,10 @@
                             })但是这种方法对电脑性能有很高的要求，所以更多时候我们建议使用 echarts-gl 中的 temporalSuperSampling，在画面静止后会持续分帧对一个像素多次抖动采样，从而达到超采样抗锯齿的效果。
                             */
                             FXAA: {
-                                enable: true
+                                enable: false
                             },
                             SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
-                                enable: true
+                                enable: false
                                 // ,radius: 2
                             }
                         },
@@ -203,60 +203,64 @@
         }
         function backtochina(){
                     mapbox.flyTo({
-                        center: [115.1700, 31.391000],
-                        zoom: 5,
+                        center: [108.3700, 29.351000],
+                        zoom: 6,
                         speed: 0.4,
                         curve: 2
                     });
                 }
 
-        $.getJSON('data/lines.json', function (mmmmmData) {
-                                var data = mmmmmData.features;
 
-                                var hStep = 300 / (data.length - 1);
-                                var linesRoutes_today = [];
-                                var linesRoutes_his = [];
-                                var i = 0;
-                                for (var x in data) {
-                                    var lnglats = data[x].geometry.coordinates
+        //     addLineToMap()
+        //    //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
+        function getData(){
+                $.getJSON('data/lines.json', function (mmmmmData) {
+                                        var data = mmmmmData.features;
 
-                                    if (data[x].geometry.type=='Today'){
-                                      color= [0.8, 0.8, 0.3, 0.8]  //金色
-                                      linesRoutes_today.push({
-                                        coords: lnglats,
-                                        lineStyle: {
-                                            opacity: 0.02,
-                                            width: 0.1,
-                                            color: color,  // 金色
-                                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                        },
-                                        value: 20 // Math.random() * 200
-                                    })
-                                    }else if(data[x].geometry.type=='Yesterday'){
-                                       color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
-                                       linesRoutes_his.push({
-                                        coords: lnglats,
-                                        lineStyle: {
-                                            opacity: 0.02,
-                                            width: 0.1,
-                                            color: color  // 蓝绿
-                                            // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                        },
-                                        value: 20 // Math.random() * 200
-                                    })
-                                    }
-                                    
-                                }
-                                option.series[2].data = linesRoutes_today;
-                                option.series[1].data = linesRoutes_his;
-                                myChart.setOption(option);
+                                        var hStep = 300 / (data.length - 1);
+                                        var linesRoutes_today = [];
+                                        var linesRoutes_his = [];
+                                        var i = 0;
+                                        for (var x in data) {
+                                            var lnglats = data[x].geometry.coordinates
 
-                            });    
+                                            if (data[x].geometry.type=='Today'){
+                                            color= [0.8, 0.8, 0.3, 0.8]  //金色
+                                            linesRoutes_today.push({
+                                                coords: lnglats,
+                                                lineStyle: {
+                                                    opacity: 0.02,
+                                                    width: 0.1,
+                                                    color: color,  // 金色
+                                                    // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                                },
+                                                value: 20 // Math.random() * 200
+                                            })
+                                            }else if(data[x].geometry.type=='Yesterday'){
+                                            color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
+                                            linesRoutes_his.push({
+                                                coords: lnglats,
+                                                lineStyle: {
+                                                    opacity: 0.02,
+                                                    width: 0.1,
+                                                    color: color  // 蓝绿
+                                                    // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                                },
+                                                value: 20 // Math.random() * 200
+                                            })
+                                            }
+                                            
+                                        }
+                                        option.series[2].data = linesRoutes_today;
+                                        option.series[1].data = linesRoutes_his;
+                                        myChart.setOption(option);
+
+                                    });    
 
 
-        $.getJSON('data/d.json', function (buildingsGeoJSON) {
+                $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
                             var regionsData = buildingsGeoJSON.map(function (feature) {
                                 return {
@@ -279,6 +283,14 @@
                             console.log(option)
                             myChart.setOption(option);
                         });
+            };
+
+            getData();
+            setInterval(function (){ 
+                console.log('*********刷新数据*******');
+                getData()
+            }, 300000);
+
 
         // function addLineToMap(){
         //     // option.series[2].data.shift()

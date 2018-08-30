@@ -9,6 +9,13 @@ from datetime import datetime
 db = db()
 
 
+
+CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
+SHOPS_WITHGEO = os.path.join(CURR_PATH,'data/csv/shops_withgeo.csv')
+USERS_WITHGEO = os.path.join(CURR_PATH,'data/csv/users_withgeo.csv')
+D_JSON = os.path.join(CURR_PATH,'data/d.json')
+LINES_JSON = os.path.join(CURR_PATH,'data/lines.json')
+
 def haversine(lon1, lat1, lon2, lat2): # 经度1，纬度1，经度2，纬度2 （十进制度数）
     """
     Calculate the great circle distance between two points 
@@ -55,8 +62,7 @@ def shop_transform():
     # df_shops = pd.read_csv(shops,encoding='utf-8',sep='>')
     # # print(df_shops[['address','城市','company_registered_address']])
     # 读取历史数据
-    shops_withgeo = 'data/csv/shops_withgeo.csv'
-    df_shops_withgeo = pd.read_csv(shops_withgeo, encoding='utf-8', sep=',',index_col='shop_id')
+    df_shops_withgeo = pd.read_csv(SHOPS_WITHGEO, encoding='utf-8', sep=',',index_col='shop_id')
     # 新增的商户数据   因为在生成shops_withgeo的时候会过滤掉地址为空的数据 因此每次这些数据会在new里面，不用管直接往下执行
     df_shops_new = df_shops.loc[df_shops.index.difference(df_shops_withgeo.index)]
     # print(df_shops_new)
@@ -81,7 +87,7 @@ def shop_transform():
     # df_shops_res = df_shops_new.combine_first(df_shops_withgeo)
     # for k, v in dtypes.iteritems():
     #     df_shops_res[k] = df_shops_res[k].astype(v)
-    df_shops_res.to_csv('data/csv/shops_withgeo.csv')
+    df_shops_res.to_csv(SHOPS_WITHGEO)
     # exit()
 
     '''
@@ -133,7 +139,7 @@ def shop_transform():
     # 如果加载太慢把数据换成800个 df_shops_withgeo[:800]
     df_shops_res[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
     # geo = [121.469560, 31.197440]
-    with open('data/d.json','w') as f:
+    with open(D_JSON,'w') as f:
         f.write(str(res).replace('\'','"'))
     return df_shops_res
 
@@ -144,8 +150,7 @@ def user_transform(df_shops_withgeo):
     geo的api调用很慢，采用增量模式，已经查过的用户不查
     ''' 
     # 读取历史数据
-    users_withgeo = 'data/csv/users_withgeo.csv'
-    df_users_withgeo = pd.read_csv(users_withgeo, encoding='utf-8', sep=',',index_col='id')
+    df_users_withgeo = pd.read_csv(USERS_WITHGEO, encoding='utf-8', sep=',',index_col='id')
     df_users = get_data('user',df_users_withgeo.index.max())
     df_users_new = df_users.set_index('id')   # debit_id
     # 全量初始化
@@ -169,7 +174,7 @@ def user_transform(df_shops_withgeo):
     
     
     # df_users_res.update(df_users)
-    df_users_res.to_csv('data/csv/users_withgeo.csv')
+    df_users_res.to_csv(USERS_WITHGEO)
     '''
     users_withgeo 处理成最终的json格式
     {
@@ -185,8 +190,7 @@ def user_transform(df_shops_withgeo):
         ]
     }
     '''
-    users_withgeo = 'data/csv/users_withgeo.csv'
-    df_users_withgeo = pd.read_csv(users_withgeo, encoding='utf-8', sep=',')
+    df_users_withgeo = pd.read_csv(USERS_WITHGEO, encoding='utf-8', sep=',')
 
     # print( len(df_users_withgeo[-df_users_withgeo['longitude'].isnull()]) )
 
@@ -226,7 +230,7 @@ def user_transform(df_shops_withgeo):
         "features": features[:500]
         }
 
-    with open('data/lines.json','w') as f:
+    with open(LINES_JSON,'w') as f:
         f.write(str(usres).replace('\'','"'))    
 
     return df_users_res
@@ -235,8 +239,10 @@ def user_transform(df_shops_withgeo):
 
 
 if __name__ == '__main__':
-    # gg = get_geo('广东省清远市英城街道富域城8栋701')
+    # gg = get_geo('陕西省咸阳市')
+    # # gg = get_geo('广东省清远市英城街道富域城8栋701')
     # print(gg)
+    # exit()
     df_shops_withgeo = shop_transform()
     user_transform(df_shops_withgeo)
 
