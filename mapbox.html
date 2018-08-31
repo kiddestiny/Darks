@@ -285,11 +285,35 @@
                         });
             };
 
+
+            function getNew(){
+                // 获取实时新数据
+            }
+
+            // mapbox.on('mousemove', function (e) {
+            //         document.getElementById('main').innerHTML =
+            //             // e.point is the x, y coordinates of the mousemove event relative
+            //             // to the top-left corner of the map
+            //             JSON.stringify(e.point) + '<br />' +
+            //             // e.lngLat is the longitude, latitude geographical position of the event
+            //             JSON.stringify(e.lngLat);
+            //     });
+
+            // var marker = new mapboxgl.Marker({
+            //     draggable: true
+            // })
+            //     .setLngLat([108.3700, 29.351000])
+            //     .addTo(mapbox);
+            // mapbox.addControl(new mapboxgl.FullscreenControl());
+
+      
             getData();
             setInterval(function (){ 
+                // mapbox.setPaintProperty('water', 'fill-color', '#253494');
+
                 console.log('*********刷新数据*******');
-                getData()
-            }, 300000);
+                // getData()
+            }, 3000);
 
 
         // function addLineToMap(){
