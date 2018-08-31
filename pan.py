@@ -39,6 +39,7 @@ def get_geo(name):
         longitude, latitude = geo.geocoder(name)
         print('%s \n经度：%f\n纬度：%f\n' % (name, longitude, latitude))
     except:
+        print('调用异常，给默认00')
         return(0,0)
     return(longitude, latitude)
 
@@ -239,10 +240,10 @@ def user_transform(df_shops_withgeo):
 
 
 if __name__ == '__main__':
-    # gg = get_geo('陕西省咸阳市')
+    gg = get_geo('广东省揭阳市')
     # # gg = get_geo('广东省清远市英城街道富域城8栋701')
-    # print(gg)
-    # exit()
+    print(gg)
+    exit()
     df_shops_withgeo = shop_transform()
     user_transform(df_shops_withgeo)
 

@@ -31,9 +31,11 @@
         getMapBoxToken()
 
         var myChart = echarts.init(document.getElementById('main'));
-
-        var linesRoutes = []
+        
+        var linesRoutes_t1 = []
+        var linesRoutes_t0 = []
         var regionsData = []
+        var newFlash = true   // 第一次刷新
         option = {
                     mapbox3D: {
                         center: [108.3700, 29.351000],
@@ -149,7 +151,7 @@
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: linesRoutes
+                        data: linesRoutes_t1
                     }
                     ,
                     { //当日
@@ -168,7 +170,7 @@
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: linesRoutes
+                        data: linesRoutes_t0
                     }
                     
                     ]
@@ -253,10 +255,29 @@
                                             }
                                             
                                         }
+                                        // var optionX = myChart.getOption();
+                                        // console.log(option.series[1].data)
+
+
+                                        // console.log(optionX.series[2].data)
+                                        // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
+                                        // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
+
                                         option.series[2].data = linesRoutes_today;
                                         option.series[1].data = linesRoutes_his;
+                                        // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
                                         myChart.setOption(option);
-
+                                        // }else{
+                                        // myChart.appendData({
+                                        //     seriesIndex: 2,   // 金色线 今日新增
+                                        //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
+                                        // });
+                                        // myChart.appendData({
+                                        //     seriesIndex: 1,   // 白色 历史
+                                        //     data: linesRoutes_his
+                                        // });
+                                        // }
+                                        // newFlash=false;
                                     });    
 
 
@@ -280,15 +301,31 @@
                             });
 
                             option.series[0].data = regionsData;
-                            console.log(option)
-                            myChart.setOption(option);
+                            // console.log(option)
+                            if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
+                                            myChart.setOption(option);
+                                        }else{
+                                            // myChart.appendData({
+                                            //     seriesIndex: 0,   // 金色线 今日新增
+                                            //     data: option.series[0].data
+                                            // });
+                                            // console.log('医院数据不刷新')
+                                        }
+                            newFlash=false;
+                            // myChart.setOption(option);
                         });
+                        
             };
 
 
-            function getNew(){
-                // 获取实时新数据
-            }
+            // function getNew(){
+            //     // 获取实时新数据
+            //     myChart.appendData({
+            //         seriesIndex: 2,   // 金色线 今日新增
+            //         data: option.series[2].data
+            //     });
+                    
+            // }
 
             // mapbox.on('mousemove', function (e) {
             //         document.getElementById('main').innerHTML =
@@ -306,14 +343,25 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-      
+            var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
+            eventSource.onmessage = function(e) {
+                // document.getElementById('main').innerHTML += e.data + '<br>';
+                console.log(typeof(e.data))
+                // {type:'newline',date:[]}
+                // (typeof myChart !== 'undefined') && myChart.dispose();
+                if(e.data=="aaa"){
+                    console.log('hahahhaha')
+                }
+                myChart.dispose()
+            }
+
+        
             getData();
             setInterval(function (){ 
                 // mapbox.setPaintProperty('water', 'fill-color', '#253494');
-
                 console.log('*********刷新数据*******');
-                // getData()
-            }, 3000);
+                getData()
+            }, 300000);
 
 
         // function addLineToMap(){
