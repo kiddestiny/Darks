@@ -96,7 +96,8 @@
     }
 
     btncity.onclick = function () {
-        flyToNextCity()
+        // flyToNextCity()
+        flyToNextCity('Beijing');
     }
 
     btnchina.onclick = function () {

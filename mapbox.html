@@ -17,6 +17,7 @@
     <script src="/js/jquery-3.3.1.js"></script>
     <script src="/js/capitals.js"></script>
     <script src="/js/commonUI.js"></script>
+    <script src="js/artyom.window.min.js"></script>
 
     <script type="text/javascript">
         function getMapBoxToken(){
@@ -79,7 +80,7 @@
                                 intensity: 1.
                             },
                             ambientCubemap: {
-                                texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
+                                // texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
                                 // http://www.hdrlabs.com/sibl/archive.html
                                 exposure: 0.9,
                                 diffuseIntensity: 0.3,
@@ -185,9 +186,10 @@
                     'Shenzhen'
                 ]
         var current = 0;
-        function flyToNextCity() {
+        function flyToNextCity(cityname) {
             // var idx = Math.round(Math.random() * (cities.length - 1));
-            var name = cities[current];
+            cityname=cityname||cities[current]
+            var name = cityname;
             var city = capitals.find(function (item) {
                 return item.CapitalName === name;
             });
@@ -203,6 +205,8 @@
             });
             current = (current + 1) % (cities.length);
         }
+
+
         function backtochina(){
                     mapbox.flyTo({
                         center: [108.3700, 29.351000],
@@ -343,17 +347,18 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-            var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
-            eventSource.onmessage = function(e) {
-                // document.getElementById('main').innerHTML += e.data + '<br>';
-                console.log(typeof(e.data))
-                // {type:'newline',date:[]}
-                // (typeof myChart !== 'undefined') && myChart.dispose();
-                if(e.data=="aaa"){
-                    console.log('hahahhaha')
-                }
-                myChart.dispose()
-            }
+            //sse从服务器端推送数据
+            // var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
+            // eventSource.onmessage = function(e) {
+            //     // document.getElementById('main').innerHTML += e.data + '<br>';
+            //     console.log(typeof(e.data))
+            //     // {type:'newline',date:[]}
+            //     // (typeof myChart !== 'undefined') && myChart.dispose();
+            //     if(e.data=="aaa"){
+            //         console.log('hahahhaha')
+            //     }
+            //     // myChart.dispose()
+            // }
 
         
             getData();
@@ -400,6 +405,42 @@
         // window.addEventListener('resize', function () {
         //     myChart.resize();
         // });
+
+
+
+        const Jarvis = new Artyom();
+
+        // Jarvis.on(["上海"]).then(function(i){
+        //     console.log("跳转到上海...");
+        //     flyToNextCity('Shanghai')
+        //     // Jarvis.say("你好")
+        //     // document.getElementById('main').innerHTML += i + '<br>';
+        // });
+        Jarvis.addCommands([
+            {
+                indexes:["上海"],
+                action:function(){
+                    console.log("跳转到上海...");
+                    flyToNextCity('Shanghai');
+                }
+            },
+            {
+                indexes:["全国"],
+                action:function(){
+                    console.log("回到全国...");
+                    backtochina();
+                }
+            }
+        ]);
+
+        Jarvis.initialize({
+        lang:"zh-CN",
+        continuous:true,
+        debug:true, // Show what recognizes in the Console
+        listen:true, // Start listening after this
+        // speed:0.9, // Talk a little bit slow
+        mode:"quick" // This parameter is not required as it will be normal by default
+    });
 
     </script>
 </body>
