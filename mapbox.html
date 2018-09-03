@@ -32,17 +32,21 @@
         getMapBoxToken()
 
         var myChart = echarts.init(document.getElementById('main'));
-        
+        var initLng = 108.3700
+        var initLat = 29.351000
+        var initZoom = 5.5
+        var initPitch = 45
+        var initBearing = 1
         var linesRoutes_t1 = []
         var linesRoutes_t0 = []
         var regionsData = []
         var newFlash = true   // 第一次刷新
         option = {
                     mapbox3D: {
-                        center: [108.3700, 29.351000],
-                        zoom: 6,
-                        pitch: 65,
-                        bearing: 5, 
+                        center: [initLng, initLat],
+                        zoom: initZoom,
+                        pitch: initPitch,
+                        bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
                         //mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
@@ -209,8 +213,8 @@
 
         function backtochina(){
                     mapbox.flyTo({
-                        center: [108.3700, 29.351000],
-                        zoom: 6,
+                        center: [initLng, initLat],
+                        zoom: initZoom,
                         speed: 0.4,
                         curve: 2
                     });
@@ -348,17 +352,17 @@
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
             //sse从服务器端推送数据
-            // var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
-            // eventSource.onmessage = function(e) {
-            //     // document.getElementById('main').innerHTML += e.data + '<br>';
-            //     console.log(typeof(e.data))
-            //     // {type:'newline',date:[]}
-            //     // (typeof myChart !== 'undefined') && myChart.dispose();
-            //     if(e.data=="aaa"){
-            //         console.log('hahahhaha')
-            //     }
-            //     // myChart.dispose()
-            // }
+            var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
+            eventSource.onmessage = function(e) {
+                // document.getElementById('main').innerHTML += e.data + '<br>';
+                console.log(typeof(e.data))
+                // {type:'newline',date:[]}
+                // (typeof myChart !== 'undefined') && myChart.dispose();
+                if(e.data=="aaa"){
+                    console.log('hahahhaha')
+                }
+                // myChart.dispose()
+            }
 
         
             getData();
