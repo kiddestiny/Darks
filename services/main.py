@@ -12,25 +12,18 @@ def subscribe():
     return flask.Response(publisher.subscribe(),
                           content_type='text/event-stream')
 
-@app.route('/')
+@app.route('/gotnewdebit')
 def root():
     # ip = flask.request.remote_addr
     # publisher.publish('New visit from {} at {}!'.format(ip, datetime.now()))
-    publisher.publish('aaa')
-
+    debitid = flask.request.args.get('debitid')
+    publisher.publish(debitid)
     return """
 <html>
     <body>
-        Open this page in new tabs to see the real time visits.
-        <div id="events" />
-        <script>
-        var eventSource = new EventSource('/subscribe');
-        eventSource.onmessage = function(e) {
-            document.getElementById('events').innerHTML += e.data + '<br>';
-        }
-        </script>
+        已发布 debitid: {} 通过 /subscribe 订阅消息
     </body>
 </html>
-"""
+""".format(debitid)
 
-app.run(debug=True, threaded=True)
+app.run(debug=True,port=8877,threaded=True)

@@ -352,15 +352,16 @@
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
             //sse从服务器端推送数据
-            var eventSource = new EventSource('http://127.0.0.1:5000/subscribe',{ withCredentials: true });
+            var eventSource = new EventSource('http://127.0.0.1:8877/subscribe',{ withCredentials: true });
             eventSource.onmessage = function(e) {
                 // document.getElementById('main').innerHTML += e.data + '<br>';
                 console.log(typeof(e.data))
+                console.log(e.data)
                 // {type:'newline',date:[]}
                 // (typeof myChart !== 'undefined') && myChart.dispose();
-                if(e.data=="aaa"){
-                    console.log('hahahhaha')
-                }
+                // if(e.data=="aaa"){
+                //     console.log('hahahhaha')
+                // }
                 // myChart.dispose()
             }
 
