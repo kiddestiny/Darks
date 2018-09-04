@@ -140,6 +140,7 @@
                     },
                     { //历史 
                         type: 'lines3D',
+                        name: 'his_line',
                         coordinateSystem: 'mapbox3D',
                         animation:true,
                         animationDurationUpdate:900,
@@ -161,6 +162,7 @@
                     ,
                     { //当日
                         type: 'lines3D',
+                        name: 'today_line',
                         coordinateSystem: 'mapbox3D',
                         // zlevel:-9,
                         effect: {
@@ -220,7 +222,7 @@
                     });
                 }
 
-
+        // myChart.setOption(option)
         //     addLineToMap()
         //    //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
         function getData(){
@@ -271,11 +273,22 @@
                                         // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
                                         // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
 
-                                        option.series[2].data = linesRoutes_today;
-                                        option.series[1].data = linesRoutes_his;
+                                        // option.series[2].data = linesRoutes_today;
+                                        // option.series[1].data = linesRoutes_his;
+                                        data2 = linesRoutes_today;
+                                        data1 = linesRoutes_his;
+
                                         // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
-                                        myChart.setOption(option);
+                                        //     myChart.setOption(option)
                                         // }else{
+                                        myChart.setOption({series: [{ //历史 
+                                                        name: 'his_line',
+                                                        data: data1
+                                                    },{
+                                                            //今日
+                                                        name: 'today_line',
+                                                        data: data2
+                                                    }]});
                                         // myChart.appendData({
                                         //     seriesIndex: 2,   // 金色线 今日新增
                                         //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
@@ -308,19 +321,25 @@
                                 };
                             });
 
-                            option.series[0].data = regionsData;
+                            // option.series[0].data = regionsData;
+                            // regionsData
                             // console.log(option)
-                            if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
-                                            myChart.setOption(option);
-                                        }else{
-                                            // myChart.appendData({
-                                            //     seriesIndex: 0,   // 金色线 今日新增
-                                            //     data: option.series[0].data
-                                            // });
-                                            // console.log('医院数据不刷新')
-                                        }
-                            newFlash=false;
+                            // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
+                            //                 myChart.setOption(option);
+                            //             }else{
+                            //                 // myChart.appendData({
+                            //                 //     seriesIndex: 0,   // 金色线 今日新增
+                            //                 //     data: option.series[0].data
+                            //                 // });
+                            //                 // console.log('医院数据不刷新')
+                            //             }
+                            // newFlash=false;
                             // myChart.setOption(option);
+                            myChart.setOption({series: [{ //历史 
+                                                        name: 'hos',
+                                                        data: regionsData
+                                                    }]});
+
                         });
                         
             };
@@ -380,7 +399,7 @@
                 // mapbox.setPaintProperty('water', 'fill-color', '#253494');
                 console.log('*********刷新数据*******');
                 getData()
-            }, 300000);
+            }, 30000);
 
 
         function addLineToMap(){
