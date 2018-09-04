@@ -1,20 +1,19 @@
 import os
 import pandas as pd
-import geoapi.geo as g
+import geo as g
 import json as json
 from db_connects.db_connects import db 
 import pandas as pd
 from math import radians, cos, sin, asin, sqrt
 from datetime import datetime
+from urllib import request
 db = db()
 
-
-
 CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
-SHOPS_WITHGEO = os.path.join(CURR_PATH,'data/csv/shops_withgeo.csv')
-USERS_WITHGEO = os.path.join(CURR_PATH,'data/csv/users_withgeo.csv')
-D_JSON = os.path.join(CURR_PATH,'data/d.json')
-LINES_JSON = os.path.join(CURR_PATH,'data/lines.json')
+SHOPS_WITHGEO = os.path.join(CURR_PATH,'../data/csv/shops_withgeo.csv')
+USERS_WITHGEO = os.path.join(CURR_PATH,'../data/csv/users_withgeo.csv')
+D_JSON = os.path.join(CURR_PATH,'../data/d.json')
+LINES_JSON = os.path.join(CURR_PATH,'../data/lines.json')
 
 def haversine(lon1, lat1, lon2, lat2): # 经度1，纬度1，经度2，纬度2 （十进制度数）
     """
@@ -144,7 +143,6 @@ def shop_transform():
         f.write(str(res).replace('\'','"'))
     return df_shops_res
 
-
 def user_transform(df_shops_withgeo):
     '''
     用户申请geo数据构造 先从数据库读取数据，根据地址去外部api查地理位置，再计算转换成前端需要的json格式存成文件，返回值是dataframe给后续调用
@@ -238,12 +236,114 @@ def user_transform(df_shops_withgeo):
 
 
 
+def shop_transform_one(debitid=0):
+    '''
+    通过gotnewdebit接口推送的debitid, debitid是新增进件的id, 更新其对应商户的统计信息
+    ''' 
+    # 获取新增用户debitid对应的医院统计信息
+    df_shops = get_data('shop_one',id=debitid)
 
-if __name__ == '__main__':
-    gg = get_geo('广东省揭阳市')
-    # # gg = get_geo('广东省清远市英城街道富域城8栋701')
-    print(gg)
-    exit()
+
+    # 设置主键为shop_id
+    df_shops = df_shops.set_index('shop_id')
+
+    # 构造商户地址
+    df_shops.loc[:,'address'] = df_shops['城市'] + df_shops['address']\
+                            .fillna(df_shops['company_registered_address'])\
+                            .fillna(df_shops['name'])\
+                            .fillna(df_shops['城市'])
+    # 地址为空的去掉
+    df_shops = df_shops[-df_shops['address'].isnull()]
+
+    # 如果没有结果  返回空字符串
+    if len(df_shops)==0:
+        return ''
+
+    # 读取历史数据
+    df_shops_withgeo = pd.read_csv(SHOPS_WITHGEO, encoding='utf-8', sep=',',index_col='shop_id')
+    
+    # 读取shops_withgeo.csv判断是否有新增的机构，如果有调用get_geo
+    df_shops_new = df_shops.loc[df_shops.index.difference(df_shops_withgeo.index)]
+    
+    if len(df_shops_new) != 0 :
+        print("有新增的医院，调用接口查询geo信息，合并到全量数据中")
+        # 调用api获取经纬度()
+        df_shops_new[['longitude','latitude']] = df_shops_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
+        df_shops_res = pd.concat([df_shops_withgeo,df_shops_new],axis=0)
+        #解决concat字段自动排序问题   https://github.com/pandas-dev/pandas/issues/4588
+        df_shops_res = df_shops_res.reindex(df_shops_withgeo.columns,axis=1)
+        df_shops_res.update(df_shops_new)
+    else:
+        df_shops_withgeo.update(df_shops)
+        df_shops_res = df_shops_withgeo
+
+    df_shops_res.to_csv(SHOPS_WITHGEO)
+
+    '''
+    shops_withgeo 处理成最终的json格式
+    [{
+        "height": 2000,
+        "polygon": [[121.47556, 31.19144], [121.47556, 31.20344], [121.46356, 31.20344], [121.46356, 31.19144]]
+            },
+    {
+    "height": 137,
+    "polygon": [
+        [121.41766, 31.270552],
+        [121.41752, 31.270572],
+        [121.41751, 31.270572],
+        [121.41745, 31.270569],
+    ]
+    }
+            ]
+    '''
+    def getSquare(geo, length=0.006):
+        res = []
+        # print([geo[0]+length, geo[1]-length])
+        res.append( [geo[0]+length, geo[1]-length] )
+        res.append( [geo[0]+length, geo[1]+length] )
+        res.append( [geo[0]-length, geo[1]+length] )
+        res.append( [geo[0]-length, geo[1]-length] )
+        return res
+
+    res = []
+    def construct_json(x):
+        # print(x[0])
+        longitude = x[0]
+        latitude = x[1]
+        abbreviation = x[2]
+        passes = x[3]
+        rejects = x[4]
+        accepts = x[5]
+        ac_amounts = x[6]
+        temp = {}
+        temp["longitude"] = round(longitude,7)
+        temp["latitude"] = round(latitude,7)
+        temp["abbreviation"] = abbreviation
+        temp["passes"] = int(passes)
+        temp["rejects"] = int(rejects)
+        temp["accepts"] = int(accepts)
+        temp["ac_amounts"] = ac_amounts     
+        temp["polygon"] = getSquare([longitude, latitude])
+        res.append(temp)
+    # 如果加载太慢把数据换成800个 df_shops_withgeo[:800]
+    df_shops_res[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
+    # geo = [121.469560, 31.197440]
+    with open(D_JSON,'w') as f:
+        f.write(str(res).replace('\'','"'))
+    return  df_shops
+
+def user_transform_one(shop_one):
+    pass
+
+
+def run():
     df_shops_withgeo = shop_transform()
     user_transform(df_shops_withgeo)
+
+if __name__ == '__main__':
+    # gg = get_geo('广东省揭阳市')
+    # # # gg = get_geo('广东省清远市英城街道富域城8栋701')
+    # print(gg)
+    # exit()
+    run()
 

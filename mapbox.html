@@ -351,12 +351,23 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-            //sse从服务器端推送数据
-            var eventSource = new EventSource('http://127.0.0.1:8877/subscribe',{ withCredentials: true });
+            // sse从服务器端推送数据
+            var eventSource = new EventSource('http://192.168.0.74:8080/subscribe',{ withCredentials: true });
             eventSource.onmessage = function(e) {
                 // document.getElementById('main').innerHTML += e.data + '<br>';
                 console.log(typeof(e.data))
                 console.log(e.data)
+                // getData(e.data);
+                console.log(typeof(marker))
+                if(typeof(marker)!="undefined"){
+                    marker.remove()
+                }
+                console.log(typeof(popup))
+                if(typeof(popup)!="undefined"){
+                    popup.remove()
+                }
+                newDebitPopUp()
+                newDebitMark()
                 // {type:'newline',date:[]}
                 // (typeof myChart !== 'undefined') && myChart.dispose();
                 // if(e.data=="aaa"){
@@ -364,8 +375,6 @@
                 // }
                 // myChart.dispose()
             }
-
-        
             getData();
             setInterval(function (){ 
                 // mapbox.setPaintProperty('water', 'fill-color', '#253494');
@@ -374,32 +383,58 @@
             }, 300000);
 
 
-        // function addLineToMap(){
-        //     // option.series[2].data.shift()
-        //     option.series[2].data.push({
-        //                                 coords: [[115.1700+Math.random()*8,31.391000+Math.random()*2],[115.1700-Math.random()*7,31.391000-Math.random()*7]],
-        //                                 lineStyle: {
-        //                                     opacity: 0.01,
-        //                                     width: 2,
-        //                                     color: [0.8, 0.8, 0.3, 0.8]   //金色
-        //                                     // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-        //                                 },
-        //                                 value: 20 // Math.random() * 200
-        //                             });
+        function addLineToMap(){
+            // option.series[2].data.shift()
+            option.series[2].data.push({
+                                        coords: [[115.1700+Math.random()*8,31.391000+Math.random()*2],[115.1700-Math.random()*7,31.391000-Math.random()*7]],
+                                        lineStyle: {
+                                            opacity: 0.01,
+                                            width: 2,
+                                            color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                        },
+                                        value: 20 // Math.random() * 200
+                                    });
 
-        //     // myChart.setOption(option,{
-        //     //     notMerge:false,
-        //     //     lazyUpdate:true,
-        //     //     silent:true
-        //     // });
+            // myChart.setOption(option,{
+            //     notMerge:false,
+            //     lazyUpdate:true,
+            //     silent:true
+            // });
 
-        //     myChart.appendData({
-        //         seriesIndex: 2,
-        //         data: option.series[2].data
-        //     });
-        //         // console.log('heheheheh')
+            myChart.appendData({
+                seriesIndex: 2,
+                data: option.series[2].data
+            });
+                // console.log('heheheheh')
 
-        // }
+        }
+        
+
+        function newDebitPopUp(){
+            var markerHeight = 50, markerRadius = 10, linearOffset = 25;
+            var popupOffsets = {
+            'top': [0, 0],
+            'top-left': [0,0],
+            'top-right': [0,0],
+            'bottom': [0, -markerHeight],
+            'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+            'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+            'left': [markerRadius, (markerHeight - markerRadius) * -1],
+            'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+            };
+            window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'my-class'})
+            .setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
+            .setHTML("<h4>新增+++++</h4>")
+            .addTo(mapbox);
+        }
+
+        function newDebitMark(){
+            window.marker = new mapboxgl.Marker()
+            .setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
+            .addTo(mapbox);
+        }
+
         
 
         // setInterval(function (){ 
@@ -413,39 +448,39 @@
 
 
 
-        const Jarvis = new Artyom();
+    //     const Jarvis = new Artyom();
 
-        // Jarvis.on(["上海"]).then(function(i){
-        //     console.log("跳转到上海...");
-        //     flyToNextCity('Shanghai')
-        //     // Jarvis.say("你好")
-        //     // document.getElementById('main').innerHTML += i + '<br>';
-        // });
-        Jarvis.addCommands([
-            {
-                indexes:["上海"],
-                action:function(){
-                    console.log("跳转到上海...");
-                    flyToNextCity('Shanghai');
-                }
-            },
-            {
-                indexes:["全国"],
-                action:function(){
-                    console.log("回到全国...");
-                    backtochina();
-                }
-            }
-        ]);
+    //     // Jarvis.on(["上海"]).then(function(i){
+    //     //     console.log("跳转到上海...");
+    //     //     flyToNextCity('Shanghai')
+    //     //     // Jarvis.say("你好")
+    //     //     // document.getElementById('main').innerHTML += i + '<br>';
+    //     // });
+    //     Jarvis.addCommands([
+    //         {
+    //             indexes:["上海"],
+    //             action:function(){
+    //                 console.log("跳转到上海...");
+    //                 flyToNextCity('Shanghai');
+    //             }
+    //         },
+    //         {
+    //             indexes:["全国"],
+    //             action:function(){
+    //                 console.log("回到全国...");
+    //                 backtochina();
+    //             }
+    //         }
+    //     ]);
 
-        Jarvis.initialize({
-        lang:"zh-CN",
-        continuous:true,
-        debug:true, // Show what recognizes in the Console
-        listen:true, // Start listening after this
-        // speed:0.9, // Talk a little bit slow
-        mode:"quick" // This parameter is not required as it will be normal by default
-    });
+    //     Jarvis.initialize({
+    //     lang:"zh-CN",
+    //     continuous:true,
+    //     debug:true, // Show what recognizes in the Console
+    //     listen:true, // Start listening after this
+    //     // speed:0.9, // Talk a little bit slow
+    //     mode:"quick" // This parameter is not required as it will be normal by default
+    // });
 
     </script>
 </body>
