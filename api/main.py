@@ -10,19 +10,20 @@ publisher = Publisher()
 
 @app.route('/subscribe')
 def subscribe():
-    # 调用pan 查询geo信息和构造json输出
-    # pan.run()
-    # pan.gotnewdebit()
-    # exit()
-    print("......................")
+    '''
+    sse subscribe
+    '''
     return flask.Response(publisher.subscribe(),
                           content_type='text/event-stream')
 
 @app.route('/gotnewdebit')
 def root():
-    # ip = flask.request.remote_addr
-    # publisher.publish('New visit from {} at {}!'.format(ip, datetime.now()))
+    '''
+    sse publish
+    '''
     debitid = flask.request.args.get('debitid')
+    # 执行逻辑
+    pan.run()
     publisher.publish(debitid)
     return """
 <html>
@@ -32,4 +33,4 @@ def root():
 </html>
 """.format(debitid)
 
-app.run(host='192.168.0.74',debug=True,port=8080,threaded=True)
+app.run(host='127.0.0.1',debug=True,port=8098,threaded=True)

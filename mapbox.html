@@ -380,33 +380,37 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-            // sse从服务器端推送数据
-            // var eventSource = new EventSource('http://192.168.0.74:8080/subscribe',{ withCredentials: true });
-            // eventSource.onmessage = function(e) {
-            //     // document.getElementById('main').innerHTML += e.data + '<br>';
-            //     console.log(typeof(e.data))
-            //     console.log(e.data)
-            //     // getData(e.data);
-            //     console.log(typeof(marker))
-            //     if(typeof(marker)!="undefined"){
-            //         marker.remove()
-            //     }
-            //     console.log(typeof(popup))
-            //     if(typeof(popup)!="undefined"){
-            //         popup.remove()
-            //     }
-            //     newDebitPopUp()
-            //     newDebitMark()
-            //     // {type:'newline',date:[]}
-            //     // (typeof myChart !== 'undefined') && myChart.dispose();
-            //     // if(e.data=="aaa"){
-            //     //     console.log('hahahhaha')
-            //     // }
-            //     // myChart.dispose()
-            // }
+            // // sse从服务器端推送数据
+            var eventSource = new EventSource('http://106.75.21.51:8888/',{ withCredentials: true });
+            eventSource.onmessage = function(e) {
+                // document.getElementById('main').innerHTML += e.data + '<br>';
+                console.log(typeof(e.data))
+                console.log(e.data)
+                // getData(e.data);
+                console.log(typeof(marker))
+                if(typeof(marker)!="undefined"){
+                    marker.remove()
+                }
+                console.log(typeof(popup))
+                if(typeof(popup)!="undefined"){
+                    popup.remove()
+                }
+                getData();
+                // newDebitPopUp()
+                // newDebitMark()
+                
 
-        // getData();
-        setInterval(getData, 30000);
+
+                // {type:'newline',date:[]}
+                // (typeof myChart !== 'undefined') && myChart.dispose();
+                // if(e.data=="aaa"){
+                //     console.log('hahahhaha')
+                // }
+                // myChart.dispose()
+            }
+
+        getData();
+        // setInterval(getData, 30000);
 
         function addLineToMap(){
             // option.series[2].data.shift()
