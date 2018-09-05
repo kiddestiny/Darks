@@ -225,18 +225,20 @@
         // myChart.setOption(option)
         //     addLineToMap()
         //    //  https://github.com/apache/incubator-echarts/issues/3539 lines 实现动态添加迁徙线，此 series 会全部刷新重画的问题
+
+        var linesRoutes_today = [];
+        var linesRoutes_his = [];
         function getData(){
-                $.getJSON('data/lines.json', function (mmmmmData) {
-                                        var data = mmmmmData.features;
-
-                                        var hStep = 300 / (data.length - 1);
-                                        var linesRoutes_today = [];
-                                        var linesRoutes_his = [];
+                console.log('loading data...')
+                $.getJSON('data/lines.json', function (data) {
+                                        // var data = mmmmmData.features;
+                                        linesRoutes_today = [];
+                                        linesRoutes_his = [];
+                                        var hStep = 300 / (data.features.length - 1);
                                         var i = 0;
-                                        for (var x in data) {
-                                            var lnglats = data[x].geometry.coordinates
-
-                                            if (data[x].geometry.type=='Today'){
+                                        for (var x in data.features) {
+                                            var lnglats = data.features[x].geometry.coordinates
+                                            if (data.features[x].geometry.type=='Today'){
                                             color= [0.8, 0.8, 0.3, 0.8]  //金色
                                             linesRoutes_today.push({
                                                 coords: lnglats,
@@ -249,7 +251,7 @@
                                                 },
                                                 value: 20 // Math.random() * 200
                                             })
-                                            }else if(data[x].geometry.type=='Yesterday'){
+                                            }else if(data.features[x].geometry.type=='Yesterday'){
                                             color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
                                             linesRoutes_his.push({
                                                 coords: lnglats,
@@ -288,7 +290,11 @@
                                                             //今日
                                                         name: 'today_line',
                                                         data: data2
-                                                    }]});
+                                                    }]},{
+                                                        notMerge:false,
+                                                        lazyUpdate:true,
+                                                        silent:true
+                                                        });
                                         // myChart.appendData({
                                         //     seriesIndex: 2,   // 金色线 今日新增
                                         //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
@@ -304,7 +310,7 @@
 
                 $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
-                            var regionsData = buildingsGeoJSON.map(function (feature) {
+                            regionsData = buildingsGeoJSON.map(function (feature) {
                                 return {
                                     // passes: feature.passes,
                                     // rejects: feature.rejects,
@@ -335,10 +341,14 @@
                             //             }
                             // newFlash=false;
                             // myChart.setOption(option);
-                            myChart.setOption({series: [{ //历史 
+                            myChart.setOption({series: [{ //商户 
                                                         name: 'hos',
                                                         data: regionsData
-                                                    }]});
+                                                    }]},{
+                                                                notMerge:false,
+                                                                lazyUpdate:true,
+                                                                silent:true
+                                                                });
 
                         });
                         
@@ -371,36 +381,32 @@
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
             // sse从服务器端推送数据
-            var eventSource = new EventSource('http://192.168.0.74:8080/subscribe',{ withCredentials: true });
-            eventSource.onmessage = function(e) {
-                // document.getElementById('main').innerHTML += e.data + '<br>';
-                console.log(typeof(e.data))
-                console.log(e.data)
-                // getData(e.data);
-                console.log(typeof(marker))
-                if(typeof(marker)!="undefined"){
-                    marker.remove()
-                }
-                console.log(typeof(popup))
-                if(typeof(popup)!="undefined"){
-                    popup.remove()
-                }
-                newDebitPopUp()
-                newDebitMark()
-                // {type:'newline',date:[]}
-                // (typeof myChart !== 'undefined') && myChart.dispose();
-                // if(e.data=="aaa"){
-                //     console.log('hahahhaha')
-                // }
-                // myChart.dispose()
-            }
-            getData();
-            setInterval(function (){ 
-                // mapbox.setPaintProperty('water', 'fill-color', '#253494');
-                console.log('*********刷新数据*******');
-                getData()
-            }, 30000);
+            // var eventSource = new EventSource('http://192.168.0.74:8080/subscribe',{ withCredentials: true });
+            // eventSource.onmessage = function(e) {
+            //     // document.getElementById('main').innerHTML += e.data + '<br>';
+            //     console.log(typeof(e.data))
+            //     console.log(e.data)
+            //     // getData(e.data);
+            //     console.log(typeof(marker))
+            //     if(typeof(marker)!="undefined"){
+            //         marker.remove()
+            //     }
+            //     console.log(typeof(popup))
+            //     if(typeof(popup)!="undefined"){
+            //         popup.remove()
+            //     }
+            //     newDebitPopUp()
+            //     newDebitMark()
+            //     // {type:'newline',date:[]}
+            //     // (typeof myChart !== 'undefined') && myChart.dispose();
+            //     // if(e.data=="aaa"){
+            //     //     console.log('hahahhaha')
+            //     // }
+            //     // myChart.dispose()
+            // }
 
+        // getData();
+        setInterval(getData, 30000);
 
         function addLineToMap(){
             // option.series[2].data.shift()
