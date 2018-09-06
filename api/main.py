@@ -33,4 +33,4 @@ def root():
 </html>
 """.format(debitid)
 
-app.run(host='127.0.0.1',debug=True,port=8098,threaded=True)
+# app.run(host='127.0.0.1',debug=True,port=8098,threaded=True)
