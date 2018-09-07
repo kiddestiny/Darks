@@ -23,7 +23,7 @@ def root():
     '''
     debitid = flask.request.args.get('debitid')
     # 执行逻辑
-    pan.run()
+    # res = pan.run(debitid=debitid)
     publisher.publish(debitid)
     return """
 <html>
@@ -34,3 +34,4 @@ def root():
 """.format(debitid)
 
 # app.run(host='127.0.0.1',debug=True,port=8098,threaded=True)
+# /data/anaconda/bin/python /data/anaconda/bin/gunicorn -w 1 -b 127.0.0.1:8098 -n ssescreen -k gevent main:app --reload -t 500 -D --access-logfile /data/log/gunicorn_sse.log

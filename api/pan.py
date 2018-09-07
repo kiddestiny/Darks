@@ -253,7 +253,7 @@ def shop_transform_one(debitid=0):
                             .fillna(df_shops['name'])\
                             .fillna(df_shops['城市'])
     # 地址为空的去掉
-    df_shops = df_shops[-df_shops['address'].isnull()]
+    # df_shops = df_shops[-df_shops['address'].isnull()]
 
     # 如果没有结果  返回空字符串
     if len(df_shops)==0:
@@ -336,9 +336,14 @@ def user_transform_one(shop_one):
     pass
 
 
-def run():
-    df_shops_withgeo = shop_transform()
-    user_transform(df_shops_withgeo)
+def run(debitid=0):
+    if debitid==0:
+        df_shops_withgeo = shop_transform()
+        user_transform(df_shops_withgeo)
+    else:
+        user_transform_one(shop_transform_one(debitid))
+        res = {"debitid":"","shopid":""}
+        return res
 
 if __name__ == '__main__':
     # gg = get_geo('广东省揭阳市')
