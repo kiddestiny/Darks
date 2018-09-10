@@ -60,10 +60,13 @@ class GeoQQ(object):
         self.values['callback'] = callback
         try:
             r = requests.get(self.url, params=self.values).json()
+            print(r)
             self.lat, self.lng = r['result']['location']['lat'], r['result']['location']['lng']
             return self.lat, self.lng
-        except:
+        except Exception as e:
             print('城市: %s 发生异常！' % (address,))
+            print(e)
+            print(e.args)
 
     # def geocoder(self, address, region='', ret_coordtype='', callback=''):
     #     self.url = 'https://apis.map.qq.com/ws/geocoder/v1/'
@@ -146,7 +149,7 @@ class ISO3166(object):
 if __name__ == '__main__':
     geo = GeoQQ()
     # geo = GeoBaidu()
-    cityName = '陕西省西安市唐延路北1号莱安意境华润万家超市入口'
+    cityName = '莆田市福建省莆田市荔城区镇海街道八二一南街185号'
     longitude, latitude = geo.geocoder(cityName)
     print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())
