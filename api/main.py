@@ -23,7 +23,7 @@ def root():
     '''
     debitid = flask.request.args.get('debitid')
     # 执行逻辑
-    res = pan.transform_one(debitid=debitid)
+    res = pan.run(debitid=debitid)
     publisher.publish(res)
     return """
 <html>
