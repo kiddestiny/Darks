@@ -247,7 +247,9 @@ def run(debitid=0):
         df_shops_withgeo = shop_transform()
         user_transform(df_shops_withgeo)
     else:
-        res = transform_one(debitid).loc[debitid]
+        res = transform_one(debitid)
+        print(res)
+        res = res.loc[debitid]
         res_json = {"debitid":debitid,"shopid":res['shop_id'],"coords":[[res['user_longitude'],res['user_latitude']],[res['shop_longitude'],res['shop_latitude']]]}
         print(res_json)
         return res_json
@@ -258,5 +260,5 @@ if __name__ == '__main__':
     # print(gg)
     # exit()
     # run(debitid=19407239)
-    run()
+    run(debitid=19407239)
 

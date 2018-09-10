@@ -41,7 +41,6 @@
         var linesRoutes_t0 = []
         var regionsData = []
         var newFlash = true   // 第一次刷新
-        var seriesIndex = 3
         option = {
                     mapbox3D: {
                         center: [initLng, initLat],
@@ -180,18 +179,10 @@
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
                         data: linesRoutes_t0
                     }
-                    
-                    
-                    ]
-                }
-
-
-        // 只有不同的series在appenddata的时候才不会重新渲染，因此要准备多一些series给新增数据
-        for(let i=0; i<1000; i++){
-            option.series.push(
+                    ,
                     { //当日
                         type: 'lines3D',
-                        name: i.toString(),
+                        name: '0001',
                         coordinateSystem: 'mapbox3D',
                         // zlevel:-9,
                         effect: {
@@ -206,12 +197,11 @@
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
                         polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: []
-                    })
-        }
-
-
-
+                        data: linesRoutes_t0
+                    }
+                    
+                    ]
+                }
 
         myChart.setOption(option);
         
@@ -259,86 +249,86 @@
         var linesRoutes_today = [];
         var linesRoutes_his = [];
         function getData(){
-            console.log('loading data...')
-            $.getJSON('data/lines.json', function (data) {
-                                    // var data = mmmmmData.features;
-                                    linesRoutes_today = [];
-                                    linesRoutes_his = [];
-                                    var hStep = 300 / (data.features.length - 1);
-                                    var i = 0;
-                                    for (var x in data.features) {
-                                        var lnglats = data.features[x].geometry.coordinates
-                                        if (data.features[x].geometry.type=='Today'){
-                                        color= [0.8, 0.8, 0.3, 0.8]  //金色
-                                        linesRoutes_today.push({
-                                            coords: lnglats,
-                                            lineStyle: {
-                                                opacity: 0.02,
-                                                width: 0.1,
-                                                color: color,  // 金色
-                                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                            },
-                                            value: 20 // Math.random() * 200
-                                        })
-                                        }else if(data.features[x].geometry.type=='Yesterday'){
-                                        color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
-                                        linesRoutes_his.push({
-                                            coords: lnglats,
-                                            lineStyle: {
-                                                opacity: 0.02,
-                                                width: 0.1,
-                                                color: color  // 蓝绿
-                                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                            },
-                                            value: 20 // Math.random() * 200
-                                        })
+                console.log('loading data...')
+                $.getJSON('data/lines.json', function (data) {
+                                        // var data = mmmmmData.features;
+                                        linesRoutes_today = [];
+                                        linesRoutes_his = [];
+                                        var hStep = 300 / (data.features.length - 1);
+                                        var i = 0;
+                                        for (var x in data.features) {
+                                            var lnglats = data.features[x].geometry.coordinates
+                                            if (data.features[x].geometry.type=='Today'){
+                                            color= [0.8, 0.8, 0.3, 0.8]  //金色
+                                            linesRoutes_today.push({
+                                                coords: lnglats,
+                                                lineStyle: {
+                                                    opacity: 0.02,
+                                                    width: 0.1,
+                                                    color: color,  // 金色
+                                                    // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                                },
+                                                value: 20 // Math.random() * 200
+                                            })
+                                            }else if(data.features[x].geometry.type=='Yesterday'){
+                                            color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
+                                            linesRoutes_his.push({
+                                                coords: lnglats,
+                                                lineStyle: {
+                                                    opacity: 0.02,
+                                                    width: 0.1,
+                                                    color: color  // 蓝绿
+                                                    // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                                                },
+                                                value: 20 // Math.random() * 200
+                                            })
+                                            }
+                                            
                                         }
-                                        
-                                    }
-                                    // var optionX = myChart.getOption();
-                                    // console.log(option.series[1].data)
+                                        // var optionX = myChart.getOption();
+                                        // console.log(option.series[1].data)
 
 
-                                    // console.log(optionX.series[2].data)
-                                    // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
-                                    // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
+                                        // console.log(optionX.series[2].data)
+                                        // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
+                                        // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
 
-                                    // option.series[2].data = linesRoutes_today;
-                                    // option.series[1].data = linesRoutes_his;
-                                    data2 = linesRoutes_today;
-                                    data1 = linesRoutes_his;
+                                        // option.series[2].data = linesRoutes_today;
+                                        // option.series[1].data = linesRoutes_his;
+                                        data2 = linesRoutes_today;
+                                        data1 = linesRoutes_his;
 
-                                    // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
-                                    //     myChart.setOption(option)
-                                    // }else{
-                                    myChart.setOption({series: [{ //历史 
-                                                    name: 'his_line',
-                                                    data: data1
-                                                },{
-                                                        //今日
-                                                    name: 'today_line',
-                                                    data: data2
-                                                }]},{
-                                                    notMerge:false,
-                                                    lazyUpdate:true,
-                                                    silent:true
-                                                    });
-                                    // myChart.appendData({
-                                    //     seriesIndex: 2,   // 金色线 今日新增
-                                    //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
-                                    // });
-                                    // myChart.appendData({
-                                    //     seriesIndex: 1,   // 白色 历史
-                                    //     data: linesRoutes_his
-                                    // });
-                                    // }
-                                    // newFlash=false;
-                                });    
+                                        // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
+                                        //     myChart.setOption(option)
+                                        // }else{
+                                        myChart.setOption({series: [{ //历史 
+                                                        name: 'his_line',
+                                                        data: data1
+                                                    },{
+                                                            //今日
+                                                        name: 'today_line',
+                                                        data: data2
+                                                    }]},{
+                                                        notMerge:false,
+                                                        lazyUpdate:true,
+                                                        silent:true
+                                                        });
+                                        // myChart.appendData({
+                                        //     seriesIndex: 2,   // 金色线 今日新增
+                                        //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
+                                        // });
+                                        // myChart.appendData({
+                                        //     seriesIndex: 1,   // 白色 历史
+                                        //     data: linesRoutes_his
+                                        // });
+                                        // }
+                                        // newFlash=false;
+                                    });    
 
 
-            $.getJSON('data/d.json', function (buildingsGeoJSON) {
+                $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
                             regionsData = buildingsGeoJSON.map(function (feature) {
                                 return {
@@ -382,30 +372,7 @@
 
                         });
                         
-        };
-
-
-        function addNewData(debitinfodata){
-            var data = []
-            console.log(debitinfodata.debitid)
-            console.log(debitinfodata.shopid)
-            data.push({
-                    coords: debitinfodata.coords,
-                    lineStyle: {
-                        opacity: 0.02,
-                        width: 0.1,
-                        // color: color,  // 金色
-                        color: [0.8, 0.8, 0.3, 0.8]   //金色
-                        // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                    },
-                    value: 20 // Math.random() * 200
-                });
-            myChart.appendData({
-                seriesIndex: seriesIndex,   // 金色线 今日新增
-                data: data
-            });
-            seriesIndex=seriesIndex+1;
-        };
+            };
 
 
             // function getNew(){
@@ -433,30 +400,27 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-            //sse从服务器端推送数据
-            var eventSource = new EventSource('https://106.75.21.51/sse/subscribe',{ withCredentials: true });
-            eventSource.onmessage = function(e) {
-                // document.getElementById('main').innerHTML += e.data + '<br>';
-                console.log(typeof(e.data))
-                console.log(e.data)
-                // getData(e.data);
-                console.log(typeof(marker))
-                if(typeof(marker)!="undefined"){
-                    marker.remove()
-                }
-                console.log(typeof(popup))
-                if(typeof(popup)!="undefined"){
-                    popup.remove()
-                }
+            //    //sse从服务器端推送数据
+            // var eventSource = new EventSource('https://106.75.21.51/sse/subscribe',{ withCredentials: true });
+            // eventSource.onmessage = function(e) {
+            //     // document.getElementById('main').innerHTML += e.data + '<br>';
+            //     console.log(typeof(e.data))
+            //     console.log(e.data)
+            //     // getData(e.data);
+            //     console.log(typeof(marker))
+            //     if(typeof(marker)!="undefined"){
+            //         marker.remove()
+            //     }
+            //     console.log(typeof(popup))
+            //     if(typeof(popup)!="undefined"){
+            //         popup.remove()
+            //     }
+            //     // getData();
+            //     // newDebitPopUp()
+            //     newDebitMark()
+            // }
 
-                addNewData(e.data)
-                // newDebitPopUp(e.data)
-                newDebitMark(e.data)
-                // // flyToNextCity()
-                // Jarvis.say("新增进件"+e.data)
-            }
-
-        getData();
+        // getData();
         // setInterval(getData, 30000);
 
         function addLineToMap(){
@@ -487,7 +451,7 @@
         }
         
 
-        function newDebitPopUp(data){
+        function newDebitPopUp(){
             var markerHeight = 50, markerRadius = 10, linearOffset = 25;
             var popupOffsets = {
             'top': [0, 0],
@@ -501,13 +465,13 @@
             };
             window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'my-class'})
             .setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
-            .setHTML("<h4>"+say+"</h4>")
+            .setHTML("<h4>新增+++++</h4>")
             .addTo(mapbox);
         }
 
-        function newDebitMark(data){
+        function newDebitMark(){
             window.marker = new mapboxgl.Marker()
-            .setLngLat(data.coords[0])
+            .setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
             .addTo(mapbox);
         }
 
@@ -524,40 +488,39 @@
 
 
 
-        const Jarvis = new Artyom();
+    //     const Jarvis = new Artyom();
 
-        // Jarvis.on(["上海"]).then(function(i){
-        //     console.log("跳转到上海...");
-        //     flyToNextCity('Shanghai')
-        //     // Jarvis.say("你好")
-        //     // document.getElementById('main').innerHTML += i + '<br>';
-        // });
-        Jarvis.addCommands([
-            {
-                indexes:["上海"],
-                action:function(){
-                    console.log("跳转到上海...");
-                    flyToNextCity('Shanghai');
-                }
-            },
-            {
-                indexes:["全国"],
-                action:function(){
-                    console.log("回到全国...");
-                    backtochina();
-                }
-            }
-        ]);
+    //     // Jarvis.on(["上海"]).then(function(i){
+    //     //     console.log("跳转到上海...");
+    //     //     flyToNextCity('Shanghai')
+    //     //     // Jarvis.say("你好")
+    //     //     // document.getElementById('main').innerHTML += i + '<br>';
+    //     // });
+    //     Jarvis.addCommands([
+    //         {
+    //             indexes:["上海"],
+    //             action:function(){
+    //                 console.log("跳转到上海...");
+    //                 flyToNextCity('Shanghai');
+    //             }
+    //         },
+    //         {
+    //             indexes:["全国"],
+    //             action:function(){
+    //                 console.log("回到全国...");
+    //                 backtochina();
+    //             }
+    //         }
+    //     ]);
 
-        Jarvis.initialize({
-        lang:"zh-CN",
-        continuous:true,
-        debug:true, // Show what recognizes in the Console
-        listen:true, // Start listening after this
-        // speed:0.9, // Talk a little bit slow
-        mode:"quick" // This parameter is not required as it will be normal by default
-    });
-        
+    //     Jarvis.initialize({
+    //     lang:"zh-CN",
+    //     continuous:true,
+    //     debug:true, // Show what recognizes in the Console
+    //     listen:true, // Start listening after this
+    //     // speed:0.9, // Talk a little bit slow
+    //     mode:"quick" // This parameter is not required as it will be normal by default
+    // });
 
     </script>
 </body>
