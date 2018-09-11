@@ -149,7 +149,7 @@ class ISO3166(object):
 if __name__ == '__main__':
     geo = GeoQQ()
     # geo = GeoBaidu()
-    cityName = '莆田市福建省莆田市荔城区镇海街道八二一南街185号'
+    cityName = '天津市市辖区同安道新河里小区27门201室'
     longitude, latitude = geo.geocoder(cityName)
     print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())

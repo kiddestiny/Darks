@@ -451,9 +451,11 @@
                 }
                 var json_data = JSON.parse(str_date)
 
-                addNewData(json_data)
-                // newDebitPopUp(e.data)
-                newDebitMark(json_data)
+                if (data.coords[0][0]!=0){
+                    addNewData(json_data)
+                    // newDebitPopUp(e.data)
+                    newDebitMark(json_data)
+                 }
                 // // flyToNextCity()
                 // Jarvis.say("新增进件"+e.data)
             }
