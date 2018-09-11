@@ -437,21 +437,21 @@
             var eventSource = new EventSource('https://106.75.21.51/sse/subscribe',{ withCredentials: true });
             eventSource.onmessage = function(e) {
                 // document.getElementById('main').innerHTML += e.data + '<br>';
-                console.log(typeof(e.data))
+                // console.log(typeof(e.data))
                 console.log(e.data)
                 str_date = e.data.replace(/'/g,"\"")
                 // getData(e.data);
-                console.log(typeof(marker))
+                // console.log(typeof(marker))
                 if(typeof(marker)!="undefined"){
                     marker.remove()
                 }
-                console.log(typeof(popup))
+                // console.log(typeof(popup))
                 if(typeof(popup)!="undefined"){
                     popup.remove()
                 }
                 var json_data = JSON.parse(str_date)
 
-                if (data.coords[0][0]!=0){
+                if (json_data.coords[0][0]!=0){
                     addNewData(json_data)
                     // newDebitPopUp(e.data)
                     newDebitMark(json_data)
