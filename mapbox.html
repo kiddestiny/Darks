@@ -451,7 +451,9 @@
                 }
                 var json_data = JSON.parse(str_date)
 
-                if (json_data.coords[0][0]!=0){
+                
+                if (json_data.coords[0][0]!=0 && json_data.coords[1][0]!=0){
+                    console.log('valid geo add line.')
                     addNewData(json_data)
                     // newDebitPopUp(e.data)
                     newDebitMark(json_data)

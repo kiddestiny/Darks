@@ -33,8 +33,8 @@ def haversine(lon1, lat1, lon2, lat2): # 经度1，纬度1，经度2，纬度2 �
 
 def get_geo(name):
     try:
-        # geo = g.GeoQQ()
-        geo = g.GeoBaidu()
+        geo = g.GeoQQ()
+        # geo = g.GeoBaidu()
         latitude, longitude = geo.geocoder(name)
         print('%s \n纬度：%f\n经度：%f\n' % (name, latitude,longitude))
     except Exception as e:
@@ -261,5 +261,5 @@ if __name__ == '__main__':
     # print(gg)
     # exit()
     # run(debitid=19407239)
-    run(debitid=19407239)
+    run()
 

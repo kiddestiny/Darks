@@ -148,11 +148,11 @@ class ISO3166(object):
 #                     return 0,0
 
 if __name__ == '__main__':
-    # geo = GeoQQ()
-    geo = GeoBaidu()
+    geo = GeoQQ()
+    # geo = GeoBaidu()
     # geo = GeoBaidu()、
-    for i in range(5):
-        cityName = '莆田市福建省莆田市荔城区镇海街道八二一南街185号'
+    for i in range(1):
+        cityName = '莆田市城厢区瑶芳美容有限公司40家直营店'
         longitude, latitude = geo.geocoder(cityName)
         print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())
@@ -170,3 +170,5 @@ if __name__ == '__main__':
     # # df_users.to_csv('asset/users_withgeo.csv')
     # # get_geo('莆田市福建省莆田市荔城区镇海街道八二一南街185号')
     # exit()
+
+    
