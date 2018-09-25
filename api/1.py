@@ -1,21 +1,38 @@
-import requests
 
-#使用高德API
-def geocodeG(address):
-    par = {'address': address, 'key': ''}
-    base = 'http://restapi.amap.com/v3/geocode/geo'
-    response = requests.get(base, par)
-    answer = response.json()
-    GPS=answer['geocodes'][0]['location'].split(",")
-    return GPS[0],GPS[1]
+import collections
+from random import choice
 
-#使用百度API
-def geocodeB(address):
-    base = url = "http://api.map.baidu.com/geocoder?address=" + address + "&output=json&key=f247cdb592eb43ebac6ccd27f796e2d2"
-    response = requests.get(base)
-    answer = response.json()
-    return answer['result']['location']['lng'],answer['result']['location']['lat']
+Card = collections.namedtuple('Card', ['rank', 'suit'])
+
+class FrenchDeck:
+    ranks = [str(n) for n in range(2,11)]+list('JQKA')
+    suits = 'spades diamonds clubs hearts'.split()
+
+    def __init__(self):
+        self._cards = [Card(rank, suit) for suit in self.suits
+                                        for rank in self.ranks]
+
+    def __len__(self):
+        return len(self._cards)
+
+    def __getitem__(self, position):
+        return self._cards[position]
+
+# sorting 
+suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
+
+def spades_high(card):
+    rank_value = FrenchDeck.ranks.index(card.rank)
+    return rank_value * len(suit_values) + suit_values[card.suit]
+    
 
 
 
+if __name__ == '__main__':
+    deck = FrenchDeck()
+    print(deck[3])
+    print(choice(deck))
+
+    for card in sorted(deck, key=spades_high):
+        print(card)
     

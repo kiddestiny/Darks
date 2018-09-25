@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # geo = GeoBaidu()
     # geo = GeoBaidu()、
     for i in range(1):
-        cityName = '莆田市城厢区瑶芳美容有限公司40家直营店'
+        cityName = '东莞南城知美医疗美容门诊有限公司东莞市南城街道元美路华凯广场C栋二楼东莞市南城街道元美路华凯广场C栋二楼'
         longitude, latitude = geo.geocoder(cityName)
         print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())
@@ -172,3 +172,22 @@ if __name__ == '__main__':
     # exit()
 
     
+
+#     import requests
+
+# #使用高德API
+# def geocodeG(address):
+#     par = {'address': address, 'key': ''}
+#     base = 'http://restapi.amap.com/v3/geocode/geo'
+#     response = requests.get(base, par)
+#     answer = response.json()
+#     GPS=answer['geocodes'][0]['location'].split(",")
+#     return GPS[0],GPS[1]
+
+# #使用百度API
+# def geocodeB(address):
+#     base = url = "http://api.map.baidu.com/geocoder?address=" + address + "&output=json&key=f247cdb592eb43ebac6ccd27f796e2d2"
+#     response = requests.get(base)
+#     answer = response.json()
+#     return answer['result']['location']['lng'],answer['result']['location']['lat']
+
