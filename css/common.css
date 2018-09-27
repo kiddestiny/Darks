@@ -21,3 +21,8 @@ body {
     left: 10px;
     z-index: 1000;
 }
+
+.popup {
+	color: red;
+	opacity:0.5;	
+}

@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # geo = GeoBaidu()
     # geo = GeoBaidu()、
     for i in range(1):
-        cityName = '东莞南城知美医疗美容门诊有限公司东莞市南城街道元美路华凯广场C栋二楼东莞市南城街道元美路华凯广场C栋二楼'
+        cityName = '上海市嘉定区沪西医院有限公司'
         longitude, latitude = geo.geocoder(cityName)
         print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())
