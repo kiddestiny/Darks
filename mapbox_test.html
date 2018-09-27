@@ -526,7 +526,7 @@
             window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
             //.setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
             .setLngLat(data.coords[1])
-            .setHTML("<b>2018-09-27 11:12:15<br>医院：上海港华<br>客户：杨晓会（30岁）<br>福建->上海<br>手术项目：下巴<br>申请金额：20000元（6期）<br>申请评级：D<b/>")
+            .setHTML("2018-09-27 11:12:15<br>医院：上海港华<br>客户：杨晓会（30岁）<br>福建->上海<br>手术项目：下巴<br>申请金额：20000元（6期）<br>申请评级：D")
             .addTo(mapbox);
         }
 
@@ -535,6 +535,19 @@
             .setLngLat(data.coords[0])
             .addTo(mapbox);
         }
+
+		
+		function executeTask(h, m, s, task) {
+			var timerId = setInterval(function () {
+					var date = new Date();
+					if (date.getHours() === h && date.getMinutes() === m && date.getSeconds() === s){
+							location.reload()	
+						}
+					}, 1000)
+		}
+
+		executeTask(18,8,23)
+
 
         
 
