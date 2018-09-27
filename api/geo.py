@@ -62,12 +62,18 @@ class GeoQQ(object):
         try:
             r = requests.get(self.url, params=self.values).json()
             print(r)
+#            if r['status'] == 347:
+#                print('查询不到结果重新查询地址的前两个字')
+#                self.values['address'] = address[:2]
+#                r = requests.get(self.url, params=self.values).json()
+#                print(r)
             self.lat, self.lng = r['result']['location']['lat'], r['result']['location']['lng']
             return self.lat, self.lng
         except Exception as e:
             print('城市: %s 发生异常！' % (address,))
             print(e)
             print(e.args)
+
 
     # def geocoder(self, address, region='', ret_coordtype='', callback=''):
     #     self.url = 'https://apis.map.qq.com/ws/geocoder/v1/'
@@ -152,7 +158,7 @@ if __name__ == '__main__':
     # geo = GeoBaidu()
     # geo = GeoBaidu()、
     for i in range(1):
-        cityName = '上海市嘉定区沪西医院有限公司'
+        cityName = '上海市上海市嘉定区沪西医院有限公司'
         longitude, latitude = geo.geocoder(cityName)
         print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())
