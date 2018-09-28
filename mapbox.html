@@ -5,19 +5,19 @@
     <title>数据流向图</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Fullscreen Landscape on iOS -->
+    <script type="text/javascript" src="/js/mapbox-gl.js" ></script>
     <link href='/css/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="/css/common.css">
 </head>
 <body>
     <div id="main"></div>
-    <script src="/js/echarts.min.js"></script>
-    <script src="/js/echarts-gl.js"></script>
+    <script type="text/javascript" src="/js/echarts.min.js" ></script>
+    <script type="text/javascript" src="/js/echarts-gl.js" ></script>
     
-    <script src='/js/mapbox-gl.js'></script>
-    <script src="/js/jquery-3.3.1.js"></script>
-    <script src="/js/capitals.js"></script>
-    <script src="/js/commonUI.js"></script>
-    <script src="js/artyom.window.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="/js/capitals.js" async="async"></script>
+    <!-- <script type="text/javascript" src="/js/commonUI.js" async="async"></script> -->
+    <script type="text/javascript" src="js/artyom.window.min.js" async="async"></script>
 
     <script type="text/javascript">
         function getMapBoxToken(){
@@ -50,7 +50,7 @@
                         bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
                         //style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
-                        style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy
+                        style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
                         // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
                         // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
@@ -112,8 +112,8 @@
                         // animation:true,
                         emphasis:{
                             itemStyle:{
-                                color:'red',
-                                opacity:1
+                                color:'pink',
+                                opacity:0.6
                             },
                             label:{
                                 show:false
@@ -122,7 +122,7 @@
                         },
                         // barSize: 4,
         
-                        bevelSize: 0.4,  // 柱子的倒角尺寸。支持设置为从 0 到 1 的值。默认为 0，即没有倒角。
+                        bevelSize: 0.5,  // 柱子的倒角尺寸。支持设置为从 0 到 1 的值。默认为 0，即没有倒角。
                         bevelSmoothness: 4, //柱子倒角的光滑/圆润度，数值越大越光滑/圆润。
                         
                         shading: 'color',  //color
@@ -173,9 +173,9 @@
                             period: 5, // 尾迹特效的周期
                             // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
                             trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 80,
+                            trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 70,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
@@ -201,9 +201,9 @@
                             period: 5, // 尾迹特效的周期
                             // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
                             trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 80,
+                            trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            spotIntensity: 70,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
                         // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
@@ -224,6 +224,19 @@
                     'Shenzhen'
                 ]
         var current = 0;
+
+		function flyto(lnglat) {
+            mapbox.flyTo({
+                center: lnglat,
+                zoom: 8,
+                speed: 0.4,
+                curve: 2
+            });
+
+			setTimeout("backtochina()",60000)
+
+		}
+		
         function flyToNextCity(cityname) {
             // var idx = Math.round(Math.random() * (cities.length - 1));
             cityname=cityname||cities[current]
@@ -244,6 +257,12 @@
             current = (current + 1) % (cities.length);
         }
 
+		function cleanPopup(){
+			if(typeof(popup)!="undefined"){
+						popup.remove()
+					}
+		}
+
 
         function backtochina(){
                     mapbox.flyTo({
@@ -252,6 +271,7 @@
                         speed: 0.4,
                         curve: 2
                     });
+			setTimeout("cleanPopup()",10000);
                 }
 
         // myChart.setOption(option)
@@ -441,7 +461,7 @@
                 // document.getElementById('main').innerHTML += e.data + '<br>';
                 // console.log(typeof(e.data))
                 console.log(e.data)
-                str_date = e.data.replace(/'/g,"\"")
+                str_data = e.data.replace(/'/g,"\"")
                 // getData(e.data);
                 // console.log(typeof(marker))
                 if(typeof(marker)!="undefined"){
@@ -451,15 +471,18 @@
                 if(typeof(popup)!="undefined"){
                     popup.remove()
                 }
-                var json_data = JSON.parse(str_date)
+                var json_data = JSON.parse(str_data)
 
                 
                 if (json_data.coords[0][0]!=0 && json_data.coords[1][0]!=0){
                     console.log('valid geo add line.')
                     addNewData(json_data)
-                    // newDebitPopUp(e.data)
                     newDebitMark(json_data)
-                 }
+					flyto(json_data.coords[1]) // hospital coords
+                    newDebitPopUp(json_data)
+                 }else{
+					 console.log('return invalid geo 0 0 no display line')
+				 }
                 // // flyToNextCity()
                 // Jarvis.say("新增进件"+e.data)
             }
@@ -495,7 +518,7 @@
         }
         
 
-        function newDebitPopUp(data){
+        function newDebitPopUp(data) {
             var markerHeight = 50, markerRadius = 10, linearOffset = 25;
             var popupOffsets = {
             'top': [0, 0],
@@ -507,9 +530,11 @@
             'left': [markerRadius, (markerHeight - markerRadius) * -1],
             'right': [-markerRadius, (markerHeight - markerRadius) * -1]
             };
-            window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'my-class'})
-            .setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
-            .setHTML("<h4>"+say+"</h4>")
+            window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
+            //.setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
+            .setLngLat(data.coords[1])
+            .setHTML(data.final_input_time+"<br>医院："+data.abbreviation+"<br>客户："+data.user_name+"（"+data.gender+data.age+"岁）<br>用户地址："+data.user_address+"<br>医院地址："+data.shop_address
+                    +"<br>手术项目："+data.oper_nm+"<br>申请金额："+data.consumer_apply_amount+"元（"+data.month_count+"期）<br>申请评级："+data.grade_class+"")
             .addTo(mapbox);
         }
 
@@ -519,7 +544,17 @@
             .addTo(mapbox);
         }
 
-        
+		
+		function executeTask(h, m, s, task) {
+			var timerId = setInterval(function () {
+					var date = new Date();
+					if (date.getHours() === h && date.getMinutes() === m && date.getSeconds() === s){
+							location.reload()	
+						}
+					}, 1000)
+		}
+
+		executeTask(1, 30, 10) // reload at 1:30:10
 
         // setInterval(function (){ 
         //     addLineToMap()
@@ -531,7 +566,7 @@
         // });
 
 
-
+/*
         const Jarvis = new Artyom();
 
         // Jarvis.on(["上海"]).then(function(i){
@@ -556,7 +591,7 @@
                 }
             }
         ]);
-/*
+
         Jarvis.initialize({
         lang:"zh-CN",
         continuous:true,

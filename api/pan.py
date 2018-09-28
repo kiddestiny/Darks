@@ -6,6 +6,7 @@ from db_connects.db_connects import db
 import pandas as pd
 from math import radians, cos, sin, asin, sqrt
 from datetime import datetime
+import time
 from urllib import request
 db = db()
 
@@ -243,6 +244,12 @@ def transform_one(debitid):
     df_info[['shop_latitude','shop_longitude']] = df_info['shop_address'].apply(lambda x: get_geo(x)).apply(pd.Series)
     return df_info
 
+def mask(s,h=5,t=12,sn=3,c='*'):
+    '''
+    保留前h个字符后t个字符中间用sn个c替换
+    '''
+    return s[:h] + sn*c + s[-t:] 
+
 def run(debitid=0):
     if debitid==0:
         df_shops_withgeo = shop_transform()
@@ -251,7 +258,7 @@ def run(debitid=0):
         res = transform_one(debitid)
         print(res)
         res = res.loc[debitid]
-        res_json = {"debitid":debitid,"shopid":res['shop_id'],"coords":[[res['user_longitude'],res['user_latitude']],[res['shop_longitude'],res['shop_latitude']]]}
+        res_json = {"debitid":debitid,"shopid":res['shop_id'],"user_address":mask(res['user_address']),"shop_address":mask(res['shop_address']),"final_input_time":res['final_input_time'].strftime("%Y-%m-%d %H:%M:%S"),"abbreviation":res["abbreviation"],"user_name":res["user_name"],"gender":res["gender"],"age":res['age'],"oper_nm":res['oper_nm'],"consumer_apply_amount":res['consumer_apply_amount'],"month_count":res['month_count'],"grade_class":res['grade_class'],"coords":[[res['user_longitude'],res['user_latitude']],[res['shop_longitude'],res['shop_latitude']]]}
         print(res_json)
         return res_json
 
