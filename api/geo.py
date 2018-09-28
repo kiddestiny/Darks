@@ -4,12 +4,11 @@ import requests
 import asyncio
 import aiohttp
 import json
+import time
 
 
 
 CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
-print("-----------")
-print(os.path.join(CURR_PATH,'tokens/baidugeo.json'))
 
 class GeoBaidu(object):
     '''
@@ -62,6 +61,7 @@ class GeoQQ(object):
         try:
             r = requests.get(self.url, params=self.values).json()
             print(r)
+            time.sleep(0.2)
 #            if r['status'] == 347:
 #                print('查询不到结果重新查询地址的前两个字')
 #                self.values['address'] = address[:2]
