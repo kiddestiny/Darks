@@ -158,7 +158,7 @@ if __name__ == '__main__':
     # geo = GeoBaidu()
     # geo = GeoBaidu()、
     for i in range(1):
-        cityName = '上海市上海市嘉定区沪西医院有限公司'
+        cityName = '安徽省阜阳市'
         longitude, latitude = geo.geocoder(cityName)
         print('%s \n经度：%f\n纬度：%f\n' % (cityName, longitude, latitude))
     # print(geo.district())

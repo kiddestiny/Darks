@@ -96,8 +96,7 @@ def shop_transform():
     shops_withgeo 处理成最终的json格式
     [{
         "height": 2000,
-        "polygon": [[121.47556, 31.19144], [121.47556, 31.20344], [121.46356, 31.20344], [121.46356, 31.19144]]
-            },
+        "polygon": [[121.47556, 31.19144], [121.47556, 31.20344], [121.46356, 31.20344], [121.46356, 31.19144]] },
     {
     "height": 137,
     "polygon": [
@@ -255,6 +254,7 @@ def run(debitid=0):
         df_shops_withgeo = shop_transform()
         user_transform(df_shops_withgeo)
     else:
+        time.sleep(0.5)
         res = transform_one(debitid)
         print(res)
         res = res.loc[debitid]
