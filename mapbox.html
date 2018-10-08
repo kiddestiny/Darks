@@ -224,8 +224,11 @@
                     'Shenzhen'
                 ]
         var current = 0;
+		var clear_timeoutid = 0;
 
 		function flyto(lnglat) {
+			clearTimeout(clear_timeoutid)
+
             mapbox.flyTo({
                 center: lnglat,
                 zoom: 8,
@@ -271,7 +274,7 @@
                         speed: 0.4,
                         curve: 2
                     });
-			setTimeout("cleanPopup()",10000);
+					clear_timeoutid = setTimeout("cleanPopup()",10000);
                 }
 
         // myChart.setOption(option)
