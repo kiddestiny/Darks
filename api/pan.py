@@ -140,7 +140,7 @@ def shop_transform():
     # 如果加载太慢把数据换成800个 df_shops_withgeo[:800]
     df_shops_res[:][['latitude','longitude','abbreviation','通过数','拒绝数','接受数','接受金额']].apply(construct_json, axis = 1)
     with open(D_JSON,'w') as f:
-        f.write(str(res).replace('\'','"'))
+        f.write(str(res).replace('\'','"'))  # 把构造好的json写入到d.json
     return df_shops_res
 
 def user_transform(df_shops_withgeo):
@@ -161,6 +161,7 @@ def user_transform(df_shops_withgeo):
     if len(df_users_new)!=0:
         # 地址用填写的城市名称+当前地址，如果为空用公司地址，都为空用身份证省所在省会城市
         df_users_new.loc[:,'address'] = (df_users_new['area_name']+df_users_new['current_address'].fillna(df_users_new['company_address'])).fillna(df_users_new['idcard_area_name'])
+        df_users_new.loc[:,'address'] = df_users_new['address'].str.replace('\'','_').str.replace('"','_').str.replace('{','_').str.replace('}','_')
         df_users_new[['latitude','longitude']] = df_users_new['address'].apply(lambda x: get_geo(x)).apply(pd.Series)
         print('new')
     df_users_res = pd.concat([df_users_new,df_users_withgeo], axis=0)
@@ -230,7 +231,7 @@ def user_transform(df_shops_withgeo):
         }
 
     with open(LINES_JSON,'w') as f:
-        f.write(str(usres).replace('\'','"'))    
+        f.write(str(usres).replace('"',"_").replace('\'','"'))    # 先把双引号过滤掉  否则json会出错     py中dict转str是单引号转成js里的json需要转换成双引号
     return df_users_res
 
 def transform_one(debitid):
