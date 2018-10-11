@@ -70,10 +70,10 @@
                             })但是这种方法对电脑性能有很高的要求，所以更多时候我们建议使用 echarts-gl 中的 temporalSuperSampling，在画面静止后会持续分帧对一个像素多次抖动采样，从而达到超采样抗锯齿的效果。
                             */
                             FXAA: {
-                                enable: false
+                                enable: true 
                             },
                             SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
-                                enable: false
+                                enable: true 
                                 // ,radius: 2
                             }
                         },
@@ -365,7 +365,7 @@
 
             $.getJSON('data/d.json', function (buildingsGeoJSON) {
 
-                            regionsData = buildingsGeoJSON.map(function (feature) {
+                            regionsData = buildingsGeoJSON.slice(0,1000).map(function (feature) {
                                 return {
                                     // passes: feature.passes,
                                     // rejects: feature.rejects,
@@ -554,7 +554,7 @@
 					if (date.getHours() === h && date.getMinutes() === m && date.getSeconds() === s){
 							location.reload()	
 						}
-					}, 1000)
+					}, 3599000)    // 这个时间不能设置短 会卡顿 1小时一次
 		}
 
 		executeTask(1, 30, 10) // reload at 1:30:10
