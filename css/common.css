@@ -23,6 +23,10 @@ body {
 }
 
 .popup {
-	color: black;
-	opacity:0.6;	
+	color: purple;
+	opacity:0.5;	
+}
+
+.marker {
+    opacity:0.2;
 }

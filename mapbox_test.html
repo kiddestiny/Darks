@@ -32,11 +32,11 @@
         getMapBoxToken()
 
         var myChart = echarts.init(document.getElementById('main'));
-        var initLng = 108.3700
-        var initLat = 29.351000
+        var initLng = 107.3700
+        var initLat = 32.351000
         var initZoom = 5.5
-        var initPitch = 45
-        var initBearing = 1
+        var initPitch = 10
+        var initBearing = 0
         var linesRoutes_t1 = []
         var linesRoutes_t0 = []
         var regionsData = []
@@ -49,8 +49,11 @@
                         pitch: initPitch,
                         bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
-                        //style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
-                        style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
+                        style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',
+                        // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
+                        // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
+                        // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
+                        // style: 'mapbox://styles/v1/mapbox/ciwmll1il003t2qpkjuuj2cku',
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
                         // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
                         // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
@@ -112,7 +115,7 @@
                         // animation:true,
                         emphasis:{
                             itemStyle:{
-                                color:'pink',
+                                color:'red',
                                 opacity:0.6
                             },
                             label:{
@@ -150,11 +153,11 @@
                         // zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 5, // 尾迹特效的周期
+                            period: 4, // 尾迹特效的周期
                             // constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
                             trailWidth: 3,  // 尾迹的宽度。
                             trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 1,  // 尾迹的不透明度，默认跟线条不透明度相同
+                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
                             spotIntensity: 40,
                             // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
                         },
@@ -170,7 +173,7 @@
                         // zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 5, // 尾迹特效的周期
+                            period: 4, // 尾迹特效的周期
                             // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
                             trailWidth: 3,  // 尾迹的宽度。
                             trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
@@ -198,7 +201,7 @@
                         // zlevel:-9,
                         effect: {
                             show: true, // 是否显示尾迹特效，默认不显示
-                            period: 5, // 尾迹特效的周期
+                            period: 4, // 尾迹特效的周期
                             // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
                             trailWidth: 3,  // 尾迹的宽度。
                             trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
@@ -232,7 +235,7 @@
             mapbox.flyTo({
                 center: lnglat,
                 zoom: 8,
-                speed: 0.4,
+                speed: 0.3,
                 curve: 2
             });
 
@@ -254,7 +257,7 @@
             mapbox.flyTo({
                 center: [city.CapitalLongitude, city.CapitalLatitude],
                 zoom: 8,
-                speed: 0.4,
+                speed: 0.3,
                 curve: 2
             });
             current = (current + 1) % (cities.length);
@@ -271,7 +274,7 @@
                     mapbox.flyTo({
                         center: [initLng, initLat],
                         zoom: initZoom,
-                        speed: 0.4,
+                        speed: 0.3,
                         curve: 2
                     });
 					clear_timeoutid = setTimeout("cleanPopup()",10000);
@@ -299,7 +302,7 @@
                                             coords: lnglats,
                                             lineStyle: {
                                                 opacity: 0.02,
-                                                width: 0.1,
+                                                width: 0.2,
                                                 color: color,  // 金色
                                                 // color: [0.8, 0.8, 0.3, 0.8]   //金色
                                                 // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
@@ -313,7 +316,7 @@
                                             lineStyle: {
                                                 opacity: 0.02,
                                                 width: 0.1,
-                                                color: color  // 蓝绿
+                                                color: color  // white
                                                 // color: [0.8, 0.8, 0.3, 0.8]   //金色
                                                 // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
                                             },
@@ -376,7 +379,8 @@
                                     // latitude: feature.latitude,
                                     // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
                                     itemStyle: {
-                                        color: '#00BFFF',
+                                        // color: '#00BFFF',  // 蓝绿
+                                        color: '#5f29e8',    // 紫
                                         opacity: 0.01
                                     }
                                 };
@@ -542,7 +546,7 @@
         }
 
         function newDebitMark(data){
-            window.marker = new mapboxgl.Marker()
+            window.marker = new mapboxgl.Marker({className:'marker'})
             .setLngLat(data.coords[0])
             .addTo(mapbox);
         }
