@@ -231,16 +231,44 @@ g=(n for n in[0,0.0,7,8])
 print(any(g))
 print(next(g))
 
+import random 
 
+a = 'ABCABC'
+b = 'BABA'
+c = 'CBA'
+x = 'ABBA'
 
+# n2 
+def first_recur(s):
+    '''
+    重复出现的字符中第一个在最左边的
+    First character that recurs
+    >>> first_recur(a)
+    'A'
+    >>> first_recur(b)
+    'B'
+    >>> first_recur(c)
+    >>> first_recur(x)
+    'A'
+    '''
+    i = 1 
+    for c in s:
+        for k in s[i:]:
+#            print(c,k)
+            if c == k:
+                return c
+        i+=1
+    return None 
 
+def recur_first():
+    '''
+    最早出现重复的字符
+    character that recurs first
+    '''
 
-
-
-
-
-
-
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
 
 
 
