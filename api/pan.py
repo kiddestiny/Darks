@@ -9,6 +9,7 @@ from datetime import datetime
 import time
 from urllib import request
 db = db()
+from tools.icd import idcard_recognize 
 
 CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
 SHOPS_WITHGEO = os.path.join(CURR_PATH,'../data/csv/shops_withgeo.csv')
@@ -269,5 +270,6 @@ if __name__ == '__main__':
     # print(gg)
     # exit()
     # run(debitid=19407239)
-    run()
+#    run()
+    idcard_recognize.process('api/tools/icd/testimages/8nbSJPQIyEytk5G4FTseYMGRZRAXN3thllA0mFoiCnh2q7SspZBIT__amOyYsf13.jpg')
 
