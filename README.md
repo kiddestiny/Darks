@@ -48,14 +48,18 @@ Darks整合了多项技术，目的是为了简化数据分析和开发处理日
 
 
 ## 开发环境部署
-#### nginx
+#### 申请tokens
+Darks依赖外部的geo接口和mapbox瓦片图服务，需要开发者申请自己的帐号获取tokens，步骤如下：
+登录并注册mapbox： https://www.mapbox.com/account/
+在account页面找到Access tokens标签页
+
+
 #### sse server
 #### 批量
 
-## 生产环境部署
-#### 申请tokens
-Darks依赖外部的geo接口和mapbox瓦片图服务，需要开发者申请自己的帐号获取tokens，步骤如下：
 
+## 生产环境部署
+#### nginx
 #### sse server
 #### 批量
 
