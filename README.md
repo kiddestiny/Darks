@@ -65,11 +65,16 @@ Darks依赖外部的geo接口和mapbox瓦片图服务，需要开发者申请自
 ```
 
 另外我们还需要geoapi的token，这里我们使用高德和qq的api，步骤如下：
-- 登录高德开放平台https://lbs.amap.com/ 注册并登录
+- 注册并登录高德开放平台https://lbs.amap.com/ 
 ![image](https://user-images.githubusercontent.com/7627381/48390014-02bfa180-e73b-11e8-8eaa-7aeeba9cfa62.png)
 - 在个人中心找到创建应用，选择web服务
 - 复制生成的key
-- 打开
+- 打开Darks/tokens_demo/gaodgeo.json粘贴token
+
+- 注册并登录https://lbs.qq.com
+- 在控制台的key管理中获取key
+- 打开Darks/tokens_demo/qqgeo.json粘贴token
+
 
 
 #### sse server
