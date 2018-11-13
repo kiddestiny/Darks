@@ -50,8 +50,26 @@ Darks整合了多项技术，目的是为了简化数据分析和开发处理日
 ## 开发环境部署
 #### 申请tokens
 Darks依赖外部的geo接口和mapbox瓦片图服务，需要开发者申请自己的帐号获取tokens，步骤如下：
-登录并注册mapbox： https://www.mapbox.com/account/
-在account页面找到Access tokens标签页
+
+- 登录并注册mapbox：
+
+ https://www.mapbox.com/account/
+
+- 在account页面找到Accesstokens标签页
+<img width="1100" alt="2018-11-13 11 37 17" src="https://user-images.githubusercontent.com/7627381/48389483-9fcd0b00-e738-11e8-98e0-636a1239def0.png">
+- 复制Accesstokens
+
+- 打开Darks/tokens_demo/mapbox.json粘贴mapbox生成的token
+``` json
+{"token": "粘贴你的token"}
+```
+
+另外我们还需要geoapi的token，这里我们使用高德和qq的api，步骤如下：
+- 登录高德开放平台https://lbs.amap.com/ 注册并登录
+![image](https://user-images.githubusercontent.com/7627381/48390014-02bfa180-e73b-11e8-8eaa-7aeeba9cfa62.png)
+- 在个人中心找到创建应用，选择web服务
+- 复制生成的key
+- 打开
 
 
 #### sse server
