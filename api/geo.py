@@ -192,7 +192,7 @@ if __name__ == '__main__':
 
 # #使用百度API
 # def geocodeB(address):
-#     base = url = "http://api.map.baidu.com/geocoder?address=" + address + "&output=json&key=f247cdb592eb43ebac6ccd27f796e2d2"
+#     base = url = "http://api.map.baidu.com/geocoder?address=" + address + "&output=json&key="
 #     response = requests.get(base)
 #     answer = response.json()
 #     return answer['result']['location']['lng'],answer['result']['location']['lat']

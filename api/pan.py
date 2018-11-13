@@ -9,7 +9,7 @@ from datetime import datetime
 import time
 from urllib import request
 db = db()
-from tools.icd import idcard_recognize 
+# from tools.icd import idcard_recognize 
 
 CURR_PATH = os.path.split(os.path.abspath(__file__))[0]
 SHOPS_WITHGEO = os.path.join(CURR_PATH,'../data/csv/shops_withgeo.csv')
@@ -264,12 +264,22 @@ def run(debitid=0):
         print(res_json)
         return res_json
 
+def run_demo(user_name,gender,demo_address):
+    # time.sleep(0.5)
+    # res = transform_one(debitid)
+    # print(res)
+    # res = res.loc[debitid]
+    geo = get_geo(demo_address)
+    res_json = {"debitid":000,"shopid":000,"user_address":demo_address,"shop_address":demo_address,"final_input_time":"2018-11-12 18:00:00","abbreviation":"测试","user_name":user_name,"gender":gender,"age":"18","oper_nm":"测试测试","consumer_apply_amount":100000,"month_count":12,"grade_class":"A","coords":[[geo[1],geo[0]],[121.417475, 31.211993]]}
+    # print(res_json)
+    return res_json
+
 if __name__ == '__main__':
     # gg = get_geo('广东省揭阳市')
     # # # gg = get_geo('广东省清远市英城街道富域城8栋701')
     # print(gg)
     # exit()
     # run(debitid=19407239)
-#    run()
-    idcard_recognize.process('api/tools/icd/testimages/8nbSJPQIyEytk5G4FTseYMGRZRAXN3thllA0mFoiCnh2q7SspZBIT__amOyYsf13.jpg')
+   run()
+    # idcard_recognize.process('api/tools/icd/testimages/8nbSJPQIyEytk5G4FTseYMGRZRAXN3thllA0mFoiCnh2q7SspZBIT__amOyYsf13.jpg')
 
