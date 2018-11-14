@@ -49,8 +49,8 @@
                         pitch: initPitch,
                         bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
-                        //style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',
-                        style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',   // Blue Night public
+                        style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',    // Blue Night public
+                        // style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',
                         // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
                         // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
                         // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
@@ -374,6 +374,7 @@
                                     // passes: feature.passes,
                                     // rejects: feature.rejects,
                                     name: feature.abbreviation,
+        
                                     value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
                                     // ac_amounts: feature.ac_amounts,
                                     // longitude: feature.longitude,
@@ -397,10 +398,11 @@
                             //                 //     seriesIndex: 0,   // 金色线 今日新增
                             //                 //     data: option.series[0].data
                             //                 // });
-                            //                 // console.log('数据不刷新')
+                            //                 // console.log('商户数据不刷新')
                             //             }
                             // newFlash=false;
                             // myChart.setOption(option);
+                            console.log(regionsData)
                             myChart.setOption({series: [{ //商户 
                                                         name: 'hos',
                                                         data: regionsData
