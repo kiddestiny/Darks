@@ -23,7 +23,7 @@ def root():
     '''
     debitid = flask.request.args.get('debitid')
     # 执行逻辑
-    res = pan.run(debitid=int(debitid))
+    res = pan_demo.run(debitid=int(debitid))
     publisher.publish(res)
     return """
 <html>
@@ -41,7 +41,7 @@ def demo():
     address = flask.request.args.get('address')
     gender = flask.request.args.get('gender')
     user_name = flask.request.args.get('user_name')
-    res = pan.run_demo(user_name,gender,address)
+    res = pan_demo.run_demo(user_name,gender,address)
     
     # 执行逻辑
     publisher.publish(res)
