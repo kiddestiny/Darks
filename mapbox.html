@@ -463,7 +463,7 @@
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
             //sse从服务器端推送数据
-            var eventSource = new EventSource('https://106.75.21.51/sse/subscribe',{ withCredentials: true });
+            var eventSource = new EventSource('https://0.0.0.0/sse/subscribe',{ withCredentials: true });
             eventSource.onmessage = function(e) {
                 // document.getElementById('main').innerHTML += e.data + '<br>';
                 // console.log(typeof(e.data))
