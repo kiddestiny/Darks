@@ -2,7 +2,7 @@ import flask
 from flask_cors import CORS
 from datetime import datetime
 from sse import Publisher
-import pan
+import pan_demo
 
 app = flask.Flask(__name__)
 CORS(app,supports_credentials=True)
