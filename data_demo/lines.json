@@ -5,7 +5,7 @@
             "type": "Feature",
             "properties": {
                 "fclass": "secondary",
-                "name": "浙江省台州市水天街184号",
+                "name": "浙江省台州市",
                 "oneway": "B",
                 "bridge": "F",
                 "tunnel": "F"
@@ -14,104 +14,12 @@
                 "type": "Today",
                 "coordinates": [
                     [
-                        121.360336,
-                        28.592509999999997
+                        121.300336,
+                        28.58250
                     ],
                     [
-                        121.46956000000002,
-                        31.197440000000004
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "fclass": "secondary",
-                "name": "广东省清远市",
-                "oneway": "B",
-                "bridge": "F",
-                "tunnel": "F"
-            },
-            "geometry": {
-                "type": "Today",
-                "coordinates": [
-                    [
-                        113.06268999999999,
-                        23.69795
-                    ],
-                    [
-                        113.3008,
-                        23.13123
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "fclass": "secondary",
-                "name": "湖南省怀化市",
-                "oneway": "B",
-                "bridge": "F",
-                "tunnel": "F"
-            },
-            "geometry": {
-                "type": "Today",
-                "coordinates": [
-                    [
-                        110.04098,
-                        27.577709999999996
-                    ],
-                    [
-                        121.46956000000002,
-                        31.197440000000004
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "fclass": "secondary",
-                "name": "安徽省合肥市长江西路与金寨路",
-                "oneway": "B",
-                "bridge": "F",
-                "tunnel": "F"
-            },
-            "geometry": {
-                "type": "Today",
-                "coordinates": [
-                    [
-                        117.318649,
-                        31.883854
-                    ],
-                    [
-                        117.27203,
-                        31.86018
-                    ]
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "fclass": "secondary",
-                "name": "浙江省杭州市富春街道后周路17号",
-                "oneway": "B",
-                "bridge": "F",
-                "tunnel": "F"
-            },
-            "geometry": {
-                "type": "Yesterday",
-                "coordinates": [
-                    [
-                        119.94051999999999,
-                        30.05547
-                    ],
-                    [
-                        121.31615,
-                        31.21303
+                        121.36956000000002,
+                        31.29744
                     ]
                 ]
             }

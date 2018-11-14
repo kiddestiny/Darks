@@ -49,11 +49,11 @@
                         pitch: initPitch,
                         bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
-                        // style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',      // Blue Night copy copy
+                        //style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',
+                        style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',   // Blue Night public
                         // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
                         // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
                         // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
-                        style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',   // Blue Night public  
                         // style: 'mapbox://styles/v1/mapbox/ciwmll1il003t2qpkjuuj2cku',
                         // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
                         // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
@@ -134,7 +134,7 @@
                             roughnessAdjust:0.5,
                             roughness: 0.1,
                             metalness: 1  
-                        },
+                        }
                         // silent: false,
                         // // instancing: false,
                         // ,realisticMaterial: {
@@ -142,7 +142,7 @@
                         //     metalness: 1,
                         //     roughness: 0.1,
                         // }
-                        minHeight: 0.1,
+                        // minHeight: 0.1,
                         // maxHeight: 0.2
                     },
                     { //历史 
@@ -368,9 +368,8 @@
 
 
             $.getJSON('data_demo/d.json', function (buildingsGeoJSON) {
-                            // console.log(buildingsGeoJSON.slice(0,1000))
+
                             regionsData = buildingsGeoJSON.slice(0,1000).map(function (feature) {
-                                console.log(feature)
                                 return {
                                     // passes: feature.passes,
                                     // rejects: feature.rejects,
@@ -398,7 +397,7 @@
                             //                 //     seriesIndex: 0,   // 金色线 今日新增
                             //                 //     data: option.series[0].data
                             //                 // });
-                            //                 // console.log('商户数据不刷新')
+                            //                 // console.log('数据不刷新')
                             //             }
                             // newFlash=false;
                             // myChart.setOption(option);
@@ -464,8 +463,8 @@
             //     .addTo(mapbox);
             // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-            // sse从服务器端推送数据
-            var eventSource = new EventSource('http://127.0.0.1:8098/subscribe',{ withCredentials: true });
+            //sse从服务器端推送数据
+            var eventSource = new EventSource('http://0.0.0.0:8098/subscribe',{ withCredentials: true });
             eventSource.onmessage = function(e) {
                 // document.getElementById('main').innerHTML += e.data + '<br>';
                 // console.log(typeof(e.data))
@@ -575,41 +574,41 @@
         // });
 
 
+/*
+        const Jarvis = new Artyom();
 
-    //     const Jarvis = new Artyom();
+        // Jarvis.on(["上海"]).then(function(i){
+        //     console.log("跳转到上海...");
+        //     flyToNextCity('Shanghai')
+        //     // Jarvis.say("你好")
+        //     // document.getElementById('main').innerHTML += i + '<br>';
+        // });
+        Jarvis.addCommands([
+            {
+                indexes:["上海"],
+                action:function(){
+                    console.log("跳转到上海...");
+                    flyToNextCity('Shanghai');
+                }
+            },
+            {
+                indexes:["全国"],
+                action:function(){
+                    console.log("回到全国...");
+                    backtochina();
+                }
+            }
+        ]);
 
-    //     // Jarvis.on(["上海"]).then(function(i){
-    //     //     console.log("跳转到上海...");
-    //     //     flyToNextCity('Shanghai')
-    //     //     // Jarvis.say("你好")
-    //     //     // document.getElementById('main').innerHTML += i + '<br>';
-    //     // });
-    //     Jarvis.addCommands([
-    //         {
-    //             indexes:["上海"],
-    //             action:function(){
-    //                 console.log("跳转到上海...");
-    //                 flyToNextCity('Shanghai');
-    //             }
-    //         },
-    //         {
-    //             indexes:["全国"],
-    //             action:function(){
-    //                 console.log("回到全国...");
-    //                 backtochina();
-    //             }
-    //         }
-    //     ]);
-
-    //     Jarvis.initialize({
-    //     lang:"zh-CN",
-    //     continuous:true,
-    //     debug:true, // Show what recognizes in the Console
-    //     listen:true, // Start listening after this
-    //     // speed:0.9, // Talk a little bit slow
-    //     mode:"quick" // This parameter is not required as it will be normal by default
-    // });
-      
+        Jarvis.initialize({
+        lang:"zh-CN",
+        continuous:true,
+        debug:true, // Show what recognizes in the Console
+        listen:true, // Start listening after this
+        // speed:0.9, // Talk a little bit slow
+        mode:"quick" // This parameter is not required as it will be normal by default
+    });
+ */       
 
     </script>
 </body>
