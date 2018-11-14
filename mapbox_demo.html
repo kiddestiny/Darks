@@ -133,7 +133,7 @@
                             roughnessAdjust:0.5,
                             roughness: 0.1,
                             metalness: 1  
-                        }
+                        },
                         // silent: false,
                         // // instancing: false,
                         // ,realisticMaterial: {
@@ -141,7 +141,7 @@
                         //     metalness: 1,
                         //     roughness: 0.1,
                         // }
-                        // minHeight: 0.1,
+                        minHeight: 0.1,
                         // maxHeight: 0.2
                     },
                     { //历史 
@@ -288,7 +288,7 @@
         var linesRoutes_his = [];
         function getData(){
             console.log('loading data...')
-            $.getJSON('data/lines.json', function (data) {
+            $.getJSON('data_demo/lines.json', function (data) {
                                     // var data = mmmmmData.features;
                                     linesRoutes_today = [];
                                     linesRoutes_his = [];
@@ -366,9 +366,10 @@
                                 });    
 
 
-            $.getJSON('data/d.json', function (buildingsGeoJSON) {
-
+            $.getJSON('data_demo/d.json', function (buildingsGeoJSON) {
+                            // console.log(buildingsGeoJSON.slice(0,1000))
                             regionsData = buildingsGeoJSON.slice(0,1000).map(function (feature) {
+                                console.log(feature)
                                 return {
                                     // passes: feature.passes,
                                     // rejects: feature.rejects,
@@ -574,39 +575,39 @@
 
 
 
-        const Jarvis = new Artyom();
+    //     const Jarvis = new Artyom();
 
-        // Jarvis.on(["上海"]).then(function(i){
-        //     console.log("跳转到上海...");
-        //     flyToNextCity('Shanghai')
-        //     // Jarvis.say("你好")
-        //     // document.getElementById('main').innerHTML += i + '<br>';
-        // });
-        Jarvis.addCommands([
-            {
-                indexes:["上海"],
-                action:function(){
-                    console.log("跳转到上海...");
-                    flyToNextCity('Shanghai');
-                }
-            },
-            {
-                indexes:["全国"],
-                action:function(){
-                    console.log("回到全国...");
-                    backtochina();
-                }
-            }
-        ]);
+    //     // Jarvis.on(["上海"]).then(function(i){
+    //     //     console.log("跳转到上海...");
+    //     //     flyToNextCity('Shanghai')
+    //     //     // Jarvis.say("你好")
+    //     //     // document.getElementById('main').innerHTML += i + '<br>';
+    //     // });
+    //     Jarvis.addCommands([
+    //         {
+    //             indexes:["上海"],
+    //             action:function(){
+    //                 console.log("跳转到上海...");
+    //                 flyToNextCity('Shanghai');
+    //             }
+    //         },
+    //         {
+    //             indexes:["全国"],
+    //             action:function(){
+    //                 console.log("回到全国...");
+    //                 backtochina();
+    //             }
+    //         }
+    //     ]);
 
-        Jarvis.initialize({
-        lang:"zh-CN",
-        continuous:true,
-        debug:true, // Show what recognizes in the Console
-        listen:true, // Start listening after this
-        // speed:0.9, // Talk a little bit slow
-        mode:"quick" // This parameter is not required as it will be normal by default
-    });
+    //     Jarvis.initialize({
+    //     lang:"zh-CN",
+    //     continuous:true,
+    //     debug:true, // Show what recognizes in the Console
+    //     listen:true, // Start listening after this
+    //     // speed:0.9, // Talk a little bit slow
+    //     mode:"quick" // This parameter is not required as it will be normal by default
+    // });
       
 
     </script>
