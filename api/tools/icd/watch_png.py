@@ -28,7 +28,8 @@ class CreatedEventHandler(FileSystemEventHandler):
 
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    print('watch begin.....')
+    # path = sys.argv[1] if len(sys.argv) > 1 else '.'
     path = '/Users/zhangmk/Desktop'
     event_handler = CreatedEventHandler()
     observer = Observer()
