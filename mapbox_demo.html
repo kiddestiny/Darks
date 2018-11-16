@@ -8,9 +8,32 @@
     <script type="text/javascript" src="/js/mapbox-gl.js" ></script>
     <link href='/css/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/menu.css">
+    <link rel="stylesheet" href="/css/all.css">
 </head>
 <body>
     <div id="main"></div>
+    <div class="container">
+        <div id="navMenu" class="diamond">
+          <div id="mainRotCorrect" class="rotCorrect"><i class="fas fa-sign-language fa-4x" aria-hidden="true"></i></div>
+        </div>
+        <div id="nav1" class="nav nav1 diamond small">
+          <div class="rotCorrect"><i class="fa fa-home fa-2x" aria-hidden="true"></i></div>
+        </div>
+        <!--<div class="popUp">Home</div>-->
+        <div id="nav2" class="nav nav2 diamond small">
+          <div class="rotCorrect"><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></div>
+        </div>
+        <div id="nav3" class="nav nav3 diamond small">
+          <div class="rotCorrect"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i></div>
+        </div>
+        <div id="nav4" class="nav nav4 diamond small">
+          <div class="rotCorrect"><i class="fa fa-line-chart fa-2x" aria-hidden="true"></i></div>
+        </div>
+        <div id="nav5" class="nav nav5 diamond small">
+          <div class="rotCorrect"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></div>
+        </div>
+    </div>
     <script type="text/javascript" src="/js/echarts.min.js" ></script>
     <script type="text/javascript" src="/js/echarts-gl.js" ></script>
     
@@ -18,6 +41,9 @@
     <script type="text/javascript" src="/js/capitals.js" async="async"></script>
     <!-- <script type="text/javascript" src="/js/commonUI.js" async="async"></script> -->
     <script type="text/javascript" src="js/artyom.window.min.js" async="async"></script>
+
+    <script type="text/javascript" src="js/gest.min.js" async="async"></script>
+
 
     <script type="text/javascript">
         function getMapBoxToken(){
@@ -49,8 +75,8 @@
                         pitch: initPitch,
                         bearing: initBearing, 
                         boxHeight: 25,   // bar的高度比例
-                        style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',    // Blue Night public
-                        // style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',
+                        // style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',    // Blue Night public
+                        style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',  // purple private
                         // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
                         // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
                         // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
@@ -576,41 +602,97 @@
         // });
 
 
-/*
-        const Jarvis = new Artyom();
+        function speechRecoStart(){
+            const Jarvis = new Artyom();
+                // Jarvis.on(["上海"]).then(function(i){
+                //     console.log("跳转到上海...");
+                //     flyToNextCity('Shanghai')
+                //     // Jarvis.say("你好")
+                //     // document.getElementById('main').innerHTML += i + '<br>';
+                // });
+                Jarvis.addCommands([
+                    {
+                        indexes:["上海"],
+                        action:function(){
+                            Jarvis.say("好的")
+                            console.log("正在转到...");
+                            flyToNextCity('Shanghai');
+                        }
+                    },
+                    {
+                        indexes:["全国"],
+                        action:function(){
+                            Jarvis.say("好的")
+                            console.log("回到全国...");
+                            backtochina();
+                        }
+                    },
+                    {
+                        indexes:["中国"],
+                        action:function(){
+                            Jarvis.say("好的")
+                            console.log("回到全国...");
+                            backtochina();
+                        }
+                    },
+                    {
+                        indexes:["国家"],
+                        action:function(){
+                            Jarvis.say("好的")
+                            console.log("回到全国...");
+                            backtochina();
+                        }
+                    },
+                    {
+                        indexes:["日本"],
+                        action:function(){
+                            Jarvis.say("好的")
+                            console.log("回到全国...");
+                            backtochina();
+                        }
+                    }
+                ]);
 
-        // Jarvis.on(["上海"]).then(function(i){
-        //     console.log("跳转到上海...");
-        //     flyToNextCity('Shanghai')
-        //     // Jarvis.say("你好")
-        //     // document.getElementById('main').innerHTML += i + '<br>';
-        // });
-        Jarvis.addCommands([
-            {
-                indexes:["上海"],
-                action:function(){
-                    console.log("跳转到上海...");
-                    flyToNextCity('Shanghai');
-                }
-            },
-            {
-                indexes:["全国"],
-                action:function(){
-                    console.log("回到全国...");
-                    backtochina();
-                }
-            }
-        ]);
+                Jarvis.initialize({
+                lang:"zh-CN",
+                continuous:true,
+                debug:false, // Show what recognizes in the Console
+                listen:true, // Start listening after this
+                // speed:0.9, // Talk a little bit slow
+                mode:"quick" // This parameter is not required as it will be normal by default
+            });
+    }
 
-        Jarvis.initialize({
-        lang:"zh-CN",
-        continuous:true,
-        debug:true, // Show what recognizes in the Console
-        listen:true, // Start listening after this
-        // speed:0.9, // Talk a little bit slow
-        mode:"quick" // This parameter is not required as it will be normal by default
+    function gestStart(){
+      document.addEventListener('gest', function(gesture) {
+          if (gesture.left) {
+              $('#navMenu').trigger('click');
+          } else if (gesture.right) {
+              $('#navMenu').trigger('click');
+          }
+      }, false);
+
+      gest.start();
+    }  
+
+
+    $(function(){
+        speechRecoStart()
+        gestStart()
     });
- */       
+
+    $(document).ready(function() {
+        $("#navMenu").click(function() {
+         //$(".nav").toggleClass("small");
+          if ($(".nav").hasClass("small")) {
+            $(".nav").removeClass("small");
+          } else {
+            $(".nav").addClass("small");
+          }
+        });
+      });
+
+  
 
     </script>
 </body>
