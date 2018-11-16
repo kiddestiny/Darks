@@ -1,5 +1,6 @@
 ## 项目架构
-![image](https://user-images.githubusercontent.com/7627381/47973227-50eef800-e0de-11e8-9571-566ea8114521.png)
+<img width="1156" alt="2018-11-16 3 37 31" src="https://user-images.githubusercontent.com/7627381/48604723-b59b3400-e9b5-11e8-9d91-a5be4b764729.png">
+
 
 ## 功能介绍
 Darks整合了多项技术，目的是为了简化数据分析和开发处理日常的报表，邮件发送，数据解析，可视化，接口，数据转换等工作：
@@ -30,6 +31,7 @@ Darks整合了多项技术，目的是为了简化数据分析和开发处理日
 ## ScreenCasts
 ![v4](https://user-images.githubusercontent.com/7627381/44331558-5d2ec600-a49c-11e8-9406-ee71ac94b52c.gif)
 <img width="1082" alt="2018-08-20 5 16 24" src="https://user-images.githubusercontent.com/7627381/44331788-083f7f80-a49d-11e8-9fad-5668b53ab954.png">
+![1542100098510](https://user-images.githubusercontent.com/7627381/48402607-fcdfb580-e766-11e8-9fe4-68f1a995d4f6.jpg)
 
 
 
@@ -65,16 +67,11 @@ Darks依赖外部的geo接口和mapbox瓦片图服务，需要开发者申请自
 ```
 
 另外我们还需要geoapi的token，这里我们使用高德和qq的api，步骤如下：
-- 注册并登录高德开放平台https://lbs.amap.com/ 
+- 登录高德开放平台https://lbs.amap.com/ 注册并登录
 ![image](https://user-images.githubusercontent.com/7627381/48390014-02bfa180-e73b-11e8-8eaa-7aeeba9cfa62.png)
 - 在个人中心找到创建应用，选择web服务
 - 复制生成的key
-- 打开Darks/tokens_demo/gaodgeo.json粘贴token
-
-- 注册并登录https://lbs.qq.com
-- 在控制台的key管理中获取key
-- 打开Darks/tokens_demo/qqgeo.json粘贴token
-
+- 打开
 
 
 #### sse server
