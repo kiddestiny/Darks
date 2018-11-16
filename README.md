@@ -1,5 +1,12 @@
+
+![image](https://user-images.githubusercontent.com/7627381/48609513-b5ebfd00-e9be-11e8-9d70-0ed597c23f74.png)
+
+
+
 ## 项目架构
-<img width="1156" alt="2018-11-16 3 37 31" src="https://user-images.githubusercontent.com/7627381/48604723-b59b3400-e9b5-11e8-9d91-a5be4b764729.png">
+![image](https://user-images.githubusercontent.com/7627381/48609616-d320cb80-e9be-11e8-8871-43dc06020506.png)
+
+
 
 
 ## 功能介绍
