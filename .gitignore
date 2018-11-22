@@ -110,3 +110,4 @@ sql/
 data/
 db_connects/
 testimages/
+node_modules/
