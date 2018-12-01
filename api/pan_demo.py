@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import geo as g
 import json as json
-from db_connects.db_connects import db 
+from db_connects_demo.db_connects import db 
 import pandas as pd
 from math import radians, cos, sin, asin, sqrt
 from datetime import datetime

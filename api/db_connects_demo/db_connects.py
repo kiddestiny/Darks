@@ -28,9 +28,9 @@ class db(object):
     @property
     def MetaData_MYSQL_duckchat(self):
         return  MetaData(self.ENGINE_MYSQL_duckchat)   
-    @property
-    def MetaData_IMPALA_DW(self):
-        return  MetaData(self.ENGINE_IMPALA_DW)
+    # @property
+    # # def MetaData_IMPALA_DW(self):
+    # #     return  MetaData(self.ENGINE_IMPALA_DW)
 
 if __name__ == '__main__':
     pass

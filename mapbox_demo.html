@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>数据流向图</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Fullscreen Landscape on iOS -->
-    <script type="text/javascript" src="/js/mapbox-gl.js" ></script>
+    <script type="text/javascript" src="/js/mapbox-gl.js"></script>
     <link href='/css/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="/css/common.css">
     <link rel="stylesheet" href="/css/menu.css">
     <link rel="stylesheet" href="/css/all.css">
 </head>
+
 <body>
     <div id="main"></div>
     <div class="container">
         <div id="navMenu" class="diamond">
-          <div id="mainRotCorrect" class="rotCorrect"><i class="fas fa-sign-language fa-4x" aria-hidden="true"></i></div>
+            <div id="mainRotCorrect" class="rotCorrect"><i class="fas fa-sign-language fa-4x" aria-hidden="true"></i></div>
         </div>
         <div id="nav1" class="nav nav1 diamond small">
-          <div class="rotCorrect"><i class="fa fa-home fa-2x" aria-hidden="true"></i></div>
+            <div class="rotCorrect"><i class="fa fa-home fa-2x" aria-hidden="true"></i></div>
         </div>
         <!--<div class="popUp">Home</div>-->
         <div id="nav2" class="nav nav2 diamond small">
-          <div class="rotCorrect"><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></div>
+            <div class="rotCorrect"><i class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></div>
         </div>
         <div id="nav3" class="nav nav3 diamond small">
-          <div class="rotCorrect"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i></div>
+            <div class="rotCorrect"><i class="fa fa-calendar fa-2x" aria-hidden="true"></i></div>
         </div>
         <div id="nav4" class="nav nav4 diamond small">
-          <div class="rotCorrect"><i class="fa fa-line-chart fa-2x" aria-hidden="true"></i></div>
+            <div class="rotCorrect"><i class="fa fa-line-chart fa-2x" aria-hidden="true"></i></div>
         </div>
         <div id="nav5" class="nav nav5 diamond small">
-          <div class="rotCorrect"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></div>
+            <div class="rotCorrect"><i class="fa fa-cogs fa-2x" aria-hidden="true"></i></div>
         </div>
     </div>
-    <script type="text/javascript" src="/js/echarts.min.js" ></script>
-    <script type="text/javascript" src="/js/echarts-gl.js" ></script>
-    
-    <script type="text/javascript" src="/js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="/js/echarts.min.js"></script>
+    <script type="text/javascript" src="/js/echarts-gl.js"></script>
+
+    <script type="text/javascript" src="/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="/js/capitals.js" async="async"></script>
-    <!-- <script type="text/javascript" src="/js/areas.js" async="async"></script> -->
+    <script type="text/javascript" src="/js/areas.js"></script>
     <!-- <script type="text/javascript" src="/js/commonUI.js" async="async"></script> -->
     <script type="text/javascript" src="js/artyom.window.min.js" async="async"></script>
 
@@ -47,15 +49,15 @@
 
 
     <script type="text/javascript">
-        function getMapBoxToken(){
-                $.ajax({
-                    url: "tokens/mapbox.json",
-                    async: false,
-                    success:function(data){
-                        mapboxgl.accessToken=data.token;
-                    }
-                })
-            }
+        function getMapBoxToken() {
+            $.ajax({
+                url: "tokens_demo/mapbox.json",
+                async: false,
+                success: function (data) {
+                    mapboxgl.accessToken = data.token;
+                }
+            })
+        }
         getMapBoxToken()
 
         var myChart = echarts.init(document.getElementById('main'));
@@ -70,195 +72,195 @@
         var newFlash = true   // 第一次刷新
         var seriesIndex = 3
         option = {
-                    mapbox3D: {
-                        center: [initLng, initLat],
-                        zoom: initZoom,
-                        pitch: initPitch,
-                        bearing: initBearing, 
-                        boxHeight: 25,   // bar的高度比例
-                        // style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',    // Blue Night public
-                        style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',  // purple private
-                        // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
-                        // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
-                        // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
-                        // style: 'mapbox://styles/v1/mapbox/ciwmll1il003t2qpkjuuj2cku',
-                        // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
-                        // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
-                        // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
-                        // style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
-                        // style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
-                        // style: 'mapbox://styles/nocmk2/cjkwe249w34pt2rpa78g1gj9s', //紫白
-                        // style: 'mapbox://styles/nocmk2/cjkwip1zw3a1s2sqnz5ns5qo3',
-                        // style: 'mapbox://styles/nocmk2/cjkxcj15d0fou2so3dw4ckmgj',  // default blue
-                        // style: 'mapbox://styles/nocmk2/cjkxclu2241yp2sqnqo1pd12p',
-                        //style: 'mapbox://styles/nocmk2/cjkwl6z2d18rf2rl70y7w56pe',
-                        
-                        postEffect: { 
-                            enable: true,
-                            /*在开启 postEffect 后，WebGL 默认的 MSAA 会无法使用。这时候通过 FXAA 可以廉价方便的解决抗锯齿的问题，FXAA 会对一些场景的边缘部分进行模糊从而解决锯齿的问题，这在一些场景上效果还不错，但是在 echarts-gl 中，需要保证很多文字和线条边缘的锐利清晰，因此 FXAA 并不是那么适用。这时候我们可以通过如下设置更高的devicePixelRatio来使用超采样
-                            var chart = echarts.init(dom, null, {
-                                devicePixelRatio: 2
-                            })但是这种方法对电脑性能有很高的要求，所以更多时候我们建议使用 echarts-gl 中的 temporalSuperSampling，在画面静止后会持续分帧对一个像素多次抖动采样，从而达到超采样抗锯齿的效果。
-                            */
-                            FXAA: {
-                                enable: true 
-                            },
-                            SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
-                                enable: true 
-                                // ,radius: 2
-                            }
-                        },
-                        light: {
-                            main: {
-                                intensity: 0.9,
-                                shadow: true,
-                                shadowQuality: 'high'
-                            },
-                            ambient: {
-                                intensity: 1.
-                            },
-                            ambientCubemap: {
-                                // texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
-                                // http://www.hdrlabs.com/sibl/archive.html
-                                exposure: 0.9,
-                                diffuseIntensity: 0.3,
-                                specularIntensity: 0.9
-                            }
-                        }
-                    },
-                    tooltip: {
-                        show: true,
-                        textStyle: {
-                            color: '#fff'
-                        },
-                        trigger: 'item'
-                    },
-                    series: [
-                        {
-                        type: 'bar3D',
-                        name: 'hos',
-                        coordinateSystem:'mapbox3D',
-                        data: [],
-                        // color: 'white',
-                        // animation:true,
-                        emphasis:{
-                            itemStyle:{
-                                color:'red',
-                                opacity:0.6
-                            },
-                            label:{
-                                show:false
-                            }
+            mapbox3D: {
+                center: [initLng, initLat],
+                zoom: initZoom,
+                pitch: initPitch,
+                bearing: initBearing,
+                boxHeight: 25,   // bar的高度比例
+                style: 'mapbox://styles/nocmk2/cjn49nzmi3fid2rs3gfk9zyvy',    // Blue Night public
+                // style: 'mapbox://styles/nocmk2/cjn9vuqg94fzd2ss14d2ttkyr',  // purple private
+                // style: 'mapbox://styles/nocmk2/cjkuwerx2179d2rpj9y9wvubj',  // Dark-copy
+                // style: 'mapbox://styles/nocmk2/cjmisxggafjbx2rnq5vqkqfbr',  // Dark-copy-copy water darker
+                // style: 'mapbox://styles/nocmk2/cjn4az7o40gkj2rlihq1z1qbm',  // Blue Night
+                // style: 'mapbox://styles/v1/mapbox/ciwmll1il003t2qpkjuuj2cku',
+                // style: 'mapbox://styles/nocmk2/cjkweod6234ad2rmvyzsqj8rp',
+                // style: 'mapbox://styles/nocmk2/cjkuul5zo0tcj2rnx9zdfqnt1',
+                // style: 'mapbox://styles/nocmk2/cjkv0dnpu0clc2rujllb4wgrz', // 卫星
+                // style: 'mapbox://styles/nocmk2/cjkuv4wkp1q382sr9a0anszjw',   // 黑色
+                // style: 'mapbox://styles/nocmk2/cjkwmeajh3bat2rkhx64r5tid', // 紫黑色
+                // style: 'mapbox://styles/nocmk2/cjkwe249w34pt2rpa78g1gj9s', //紫白
+                // style: 'mapbox://styles/nocmk2/cjkwip1zw3a1s2sqnz5ns5qo3',
+                // style: 'mapbox://styles/nocmk2/cjkxcj15d0fou2so3dw4ckmgj',  // default blue
+                // style: 'mapbox://styles/nocmk2/cjkxclu2241yp2sqnqo1pd12p',
+                //style: 'mapbox://styles/nocmk2/cjkwl6z2d18rf2rl70y7w56pe',
 
-                        },
-                        // barSize: 4,
-        
-                        bevelSize: 0.5,  // 柱子的倒角尺寸。支持设置为从 0 到 1 的值。默认为 0，即没有倒角。
-                        bevelSmoothness: 4, //柱子倒角的光滑/圆润度，数值越大越光滑/圆润。
-                        
-                        shading: 'color',  //color
-                        realisticMaterial: {
-                            roughnessAdjust:0.5,
-                            roughness: 0.1,
-                            metalness: 1  
-                        }
-                        // silent: false,
-                        // // instancing: false,
-                        // ,realisticMaterial: {
-                        //     detailTexture:'',
-                        //     metalness: 1,
-                        //     roughness: 0.1,
-                        // }
-                        // minHeight: 0.1,
-                        // maxHeight: 0.2
+                postEffect: {
+                    enable: true,
+                    /*在开启 postEffect 后，WebGL 默认的 MSAA 会无法使用。这时候通过 FXAA 可以廉价方便的解决抗锯齿的问题，FXAA 会对一些场景的边缘部分进行模糊从而解决锯齿的问题，这在一些场景上效果还不错，但是在 echarts-gl 中，需要保证很多文字和线条边缘的锐利清晰，因此 FXAA 并不是那么适用。这时候我们可以通过如下设置更高的devicePixelRatio来使用超采样
+                    var chart = echarts.init(dom, null, {
+                        devicePixelRatio: 2
+                    })但是这种方法对电脑性能有很高的要求，所以更多时候我们建议使用 echarts-gl 中的 temporalSuperSampling，在画面静止后会持续分帧对一个像素多次抖动采样，从而达到超采样抗锯齿的效果。
+                    */
+                    FXAA: {
+                        enable: true
                     },
-                    { //历史 
-                        type: 'lines3D',
-                        name: 'his_line',
-                        coordinateSystem: 'mapbox3D',
-                        // animation:true,
-                        // animationDurationUpdate:900,
-                        // zlevel:-9,
-                        effect: {
-                            show: true, // 是否显示尾迹特效，默认不显示
-                            period: 4, // 尾迹特效的周期
-                            // constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 40,
-                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
-                        },
-                        // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
-                        polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: linesRoutes_t1
+                    SSAO: {     // 屏幕空间的环境光遮蔽效果。环境光遮蔽可以让角落，缝隙等大部分光无法到达的区域变暗，是传统的阴影贴图的补充，可以让整个场景更加自然，有层次
+                        enable: true
+                        // ,radius: 2
                     }
-                    ,
-                    { //当日
-                        type: 'lines3D',
-                        name: 'today_line',
-                        coordinateSystem: 'mapbox3D',
-                        // zlevel:-9,
-                        effect: {
-                            show: true, // 是否显示尾迹特效，默认不显示
-                            period: 4, // 尾迹特效的周期
-                            // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 70,
-                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
-                        },
-                        // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
-                        polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: linesRoutes_t0
+                },
+                light: {
+                    main: {
+                        intensity: 0.9,
+                        shadow: true,
+                        shadowQuality: 'high'
+                    },
+                    ambient: {
+                        intensity: 1.
+                    },
+                    ambientCubemap: {
+                        // texture: 'hdr/LA_Downtown_Afternoon_Fishing_3k.hdr',
+                        // http://www.hdrlabs.com/sibl/archive.html
+                        exposure: 0.9,
+                        diffuseIntensity: 0.3,
+                        specularIntensity: 0.9
                     }
-                    
-                    
-                    ]
+                }
+            },
+            tooltip: {
+                show: true,
+                textStyle: {
+                    color: '#fff'
+                },
+                trigger: 'item'
+            },
+            series: [
+                {
+                    type: 'bar3D',
+                    name: 'hos',
+                    coordinateSystem: 'mapbox3D',
+                    data: [],
+                    // color: 'white',
+                    // animation:true,
+                    emphasis: {
+                        itemStyle: {
+                            color: 'red',
+                            opacity: 0.6
+                        },
+                        label: {
+                            show: false
+                        }
+
+                    },
+                    // barSize: 4,
+
+                    bevelSize: 0.5,  // 柱子的倒角尺寸。支持设置为从 0 到 1 的值。默认为 0，即没有倒角。
+                    bevelSmoothness: 4, //柱子倒角的光滑/圆润度，数值越大越光滑/圆润。
+
+                    shading: 'color',  //color
+                    realisticMaterial: {
+                        roughnessAdjust: 0.5,
+                        roughness: 0.1,
+                        metalness: 1
+                    }
+                    // silent: false,
+                    // // instancing: false,
+                    // ,realisticMaterial: {
+                    //     detailTexture:'',
+                    //     metalness: 1,
+                    //     roughness: 0.1,
+                    // }
+                    // minHeight: 0.1,
+                    // maxHeight: 0.2
+                },
+                { //历史 
+                    type: 'lines3D',
+                    name: 'his_line',
+                    coordinateSystem: 'mapbox3D',
+                    // animation:true,
+                    // animationDurationUpdate:900,
+                    // zlevel:-9,
+                    effect: {
+                        show: true, // 是否显示尾迹特效，默认不显示
+                        period: 4, // 尾迹特效的周期
+                        // constantSpeed: 6,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                        trailWidth: 3,  // 尾迹的宽度。
+                        trailLength: 0.2,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                        trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
+                        spotIntensity: 40,
+                        // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                    },
+                    // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                    polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+                    data: linesRoutes_t1
+                }
+                ,
+                { //当日
+                    type: 'lines3D',
+                    name: 'today_line',
+                    coordinateSystem: 'mapbox3D',
+                    // zlevel:-9,
+                    effect: {
+                        show: true, // 是否显示尾迹特效，默认不显示
+                        period: 4, // 尾迹特效的周期
+                        // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                        trailWidth: 3,  // 尾迹的宽度。
+                        trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                        trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
+                        spotIntensity: 70,
+                        // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                    },
+                    // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                    polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+                    data: linesRoutes_t0
                 }
 
 
+            ]
+        }
+
+
         // 只有不同的series在appenddata的时候才不会重新渲染，因此要准备多一些series给新增数据
-        for(let i=0; i<1000; i++){
+        for (let i = 0; i < 1000; i++) {
             option.series.push(
-                    { //当日
-                        type: 'lines3D',
-                        name: i.toString(),
-                        coordinateSystem: 'mapbox3D',
-                        // zlevel:-9,
-                        effect: {
-                            show: true, // 是否显示尾迹特效，默认不显示
-                            period: 4, // 尾迹特效的周期
-                            // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
-                            trailWidth: 3,  // 尾迹的宽度。
-                            trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
-                            trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
-                            spotIntensity: 70,
-                            // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
-                        },
-                        // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
-                        polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
-                        data: []
-                    })
+                { //当日
+                    type: 'lines3D',
+                    name: i.toString(),
+                    coordinateSystem: 'mapbox3D',
+                    // zlevel:-9,
+                    effect: {
+                        show: true, // 是否显示尾迹特效，默认不显示
+                        period: 4, // 尾迹特效的周期
+                        // constantSpeed: 3,  //轨迹特效的移动动画是否是固定速度，单位按三维空间的尺寸，设置为非 null 的值后会忽略 period 配置项。
+                        trailWidth: 3,  // 尾迹的宽度。
+                        trailLength: 0.3,  // 尾迹的长度，范围从 0 到 1，为线条长度的百分比。
+                        trailOpacity: 0.7,  // 尾迹的不透明度，默认跟线条不透明度相同
+                        spotIntensity: 70,
+                        // trailColor: '#222'  // 尾迹的颜色，默认跟线条颜色相同。
+                    },
+                    // blendMode: 'source-over',  //混合模式，目前支持'source-over'，'lighter'，默认使用的'source-over'是通过 alpha 混合，而'lighter'是叠加模式，该模式可以让数据集中的区域因为叠加而产生高亮的效果。
+                    polyline: true,  // 如果该配置项为 true，则可以在 data.coords 中设置多于 2 个的顶点用来绘制多段线，在绘制路线轨迹的时候比较有用。
+                    data: []
+                })
         }
 
 
 
 
         myChart.setOption(option);
-        
+
         var mapbox = myChart.getModel().getComponent('mapbox3D').getMapbox();
         var cities = [
-                    'Beijing',
-                    'Shanghai',
-                    'Shenzhen'
-                ]
+            'Beijing',
+            'Shanghai',
+            'Shenzhen'
+        ]
         var current = 0;
-		var clear_timeoutid = 0;
+        var clear_timeoutid = 0;
 
-		function flyto(lnglat) {
-			clearTimeout(clear_timeoutid)
+        function flyto(lnglat) {
+            clearTimeout(clear_timeoutid)
 
             mapbox.flyTo({
                 center: lnglat,
@@ -267,13 +269,13 @@
                 curve: 2
             });
 
-			setTimeout("backtochina()",60000)
+            setTimeout("backtochina()", 60000)
 
-		}
-		
+        }
+
         function flyToNextCity(cityname) {
             // var idx = Math.round(Math.random() * (cities.length - 1));
-            cityname=cityname||cities[current]
+            cityname = cityname || cities[current]
             var name = cityname;
             var city = capitals.find(function (item) {
                 return item.CapitalName === name;
@@ -309,22 +311,22 @@
             current = (current + 1) % (cities.length);
         }
 
-		function cleanPopup(){
-			if(typeof(popup)!="undefined"){
-						popup.remove()
-					}
-		}
+        function cleanPopup() {
+            if (typeof (popup) != "undefined") {
+                popup.remove()
+            }
+        }
 
 
-        function backtochina(){
-                    mapbox.flyTo({
-                        center: [initLng, initLat],
-                        zoom: initZoom,
-                        speed: 0.3,
-                        curve: 2
-                    });
-					clear_timeoutid = setTimeout("cleanPopup()",10000);
-                }
+        function backtochina() {
+            mapbox.flyTo({
+                center: [initLng, initLat],
+                zoom: initZoom,
+                speed: 0.3,
+                curve: 2
+            });
+            clear_timeoutid = setTimeout("cleanPopup()", 10000);
+        }
 
         // myChart.setOption(option)
         //     addLineToMap()
@@ -332,231 +334,235 @@
 
         var linesRoutes_today = [];
         var linesRoutes_his = [];
-        function getData(){
+        function getData() {
             console.log('loading data...')
             $.getJSON('data_demo/lines.json', function (data) {
-                                    // var data = mmmmmData.features;
-                                    linesRoutes_today = [];
-                                    linesRoutes_his = [];
-                                    var hStep = 300 / (data.features.length - 1);
-                                    var i = 0;
-                                    for (var x in data.features) {
-                                        var lnglats = data.features[x].geometry.coordinates
-                                        if (data.features[x].geometry.type=='Today'){
-                                        color= [0.8, 0.8, 0.3, 0.8]  //金色
-                                        linesRoutes_today.push({
-                                            coords: lnglats,
-                                            lineStyle: {
-                                                opacity: 0.02,
-                                                width: 0.2,
-                                                color: color,  // 金色
-                                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                            },
-                                            value: 20 // Math.random() * 200
-                                        })
-                                        }else if(data.features[x].geometry.type=='Yesterday'){
-                                        color=[0.8, 0.8, 0.8, 0.8]  // 蓝绿 
-                                        linesRoutes_his.push({
-                                            coords: lnglats,
-                                            lineStyle: {
-                                                opacity: 0.02,
-                                                width: 0.1,
-                                                color: color  // white
-                                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                            },
-                                            value: 20 // Math.random() * 200
-                                        })
-                                        }
-                                        
-                                    }
-                                    // var optionX = myChart.getOption();
-                                    // console.log(option.series[1].data)
+                // var data = mmmmmData.features;
+                linesRoutes_today = [];
+                linesRoutes_his = [];
+                var hStep = 300 / (data.features.length - 1);
+                var i = 0;
+                for (var x in data.features) {
+                    var lnglats = data.features[x].geometry.coordinates
+                    if (data.features[x].geometry.type == 'Today') {
+                        color = [0.8, 0.8, 0.3, 0.8]  //金色
+                        linesRoutes_today.push({
+                            coords: lnglats,
+                            lineStyle: {
+                                opacity: 0.02,
+                                width: 0.2,
+                                color: color,  // 金色
+                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                            },
+                            value: 20 // Math.random() * 200
+                        })
+                    } else if (data.features[x].geometry.type == 'Yesterday') {
+                        color = [0.8, 0.8, 0.8, 0.8]  // 蓝绿 
+                        linesRoutes_his.push({
+                            coords: lnglats,
+                            lineStyle: {
+                                opacity: 0.02,
+                                width: 0.1,
+                                color: color  // white
+                                // color: [0.8, 0.8, 0.3, 0.8]   //金色
+                                // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                            },
+                            value: 20 // Math.random() * 200
+                        })
+                    }
+
+                }
+                // var optionX = myChart.getOption();
+                // console.log(option.series[1].data)
 
 
-                                    // console.log(optionX.series[2].data)
-                                    // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
-                                    // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
+                // console.log(optionX.series[2].data)
+                // console.log(linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x)))
+                // console.log(linesRoutes_his.filter(x=>!optionX.series[1].data.includes(x)))
 
-                                    // option.series[2].data = linesRoutes_today;
-                                    // option.series[1].data = linesRoutes_his;
-                                    data2 = linesRoutes_today;
-                                    data1 = linesRoutes_his;
+                // option.series[2].data = linesRoutes_today;
+                // option.series[1].data = linesRoutes_his;
+                data2 = linesRoutes_today;
+                data1 = linesRoutes_his;
 
-                                    // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
-                                    //     myChart.setOption(option)
-                                    // }else{
-                                    myChart.setOption({series: [{ //历史 
-                                                    name: 'his_line',
-                                                    data: data1
-                                                },{
-                                                        //今日
-                                                    name: 'today_line',
-                                                    data: data2
-                                                }]},{
-                                                    notMerge:false,
-                                                    lazyUpdate:true,
-                                                    silent:true
-                                                    });
-                                    // myChart.appendData({
-                                    //     seriesIndex: 2,   // 金色线 今日新增
-                                    //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
-                                    // });
-                                    // myChart.appendData({
-                                    //     seriesIndex: 1,   // 白色 历史
-                                    //     data: linesRoutes_his
-                                    // });
-                                    // }
-                                    // newFlash=false;
-                                });    
+                // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
+                //     myChart.setOption(option)
+                // }else{
+                myChart.setOption({
+                    series: [{ //历史 
+                        name: 'his_line',
+                        data: data1
+                    }, {
+                        //今日
+                        name: 'today_line',
+                        data: data2
+                    }]
+                }, {
+                        notMerge: false,
+                        lazyUpdate: true,
+                        silent: true
+                    });
+                // myChart.appendData({
+                //     seriesIndex: 2,   // 金色线 今日新增
+                //     data: linesRoutes_today.filter(x=>!optionX.series[2].data.includes(x))
+                // });
+                // myChart.appendData({
+                //     seriesIndex: 1,   // 白色 历史
+                //     data: linesRoutes_his
+                // });
+                // }
+                // newFlash=false;
+            });
 
 
             $.getJSON('data_demo/d.json', function (buildingsGeoJSON) {
 
-                            regionsData = buildingsGeoJSON.slice(0,1000).map(function (feature) {
-                                return {
-                                    // passes: feature.passes,
-                                    // rejects: feature.rejects,
-                                    name: feature.abbreviation,
-        
-                                    value: [feature.longitude,feature.latitude,feature.accepts],                // Math.random() * 1,
-                                    // ac_amounts: feature.ac_amounts,
-                                    // longitude: feature.longitude,
-                                    // latitude: feature.latitude,
-                                    // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
-                                    itemStyle: {
-                                        // color: '#00BFFF',  // 蓝绿
-                                        color: '#5f29e8',    // 紫
-                                        opacity: 0.01
-                                    }
-                                };
-                            });
+                regionsData = buildingsGeoJSON.slice(0, 1000).map(function (feature) {
+                    return {
+                        // passes: feature.passes,
+                        // rejects: feature.rejects,
+                        name: feature.abbreviation,
 
-                            // option.series[0].data = regionsData;
-                            // regionsData
-                            // console.log(option)
-                            // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
-                            //                 myChart.setOption(option);
-                            //             }else{
-                            //                 // myChart.appendData({
-                            //                 //     seriesIndex: 0,   // 金色线 今日新增
-                            //                 //     data: option.series[0].data
-                            //                 // });
-                            //                 // console.log('商户数据不刷新')
-                            //             }
-                            // newFlash=false;
-                            // myChart.setOption(option);
-                            console.log(regionsData)
-                            myChart.setOption({series: [{ //商户 
-                                                        name: 'hos',
-                                                        data: regionsData
-                                                    }]},{
-                                                                notMerge:false,
-                                                                lazyUpdate:true,
-                                                                silent:true
-                                                                });
+                        value: [feature.longitude, feature.latitude, feature.accepts],                // Math.random() * 1,
+                        // ac_amounts: feature.ac_amounts,
+                        // longitude: feature.longitude,
+                        // latitude: feature.latitude,
+                        // height: feature.accepts * 0.00002 || 0.1,          // Math.log(feature.properties.height)/Math.log(10) , Math.atan(feature.properties.height)*2/Math.PI*1000
+                        itemStyle: {
+                            // color: '#00BFFF',  // 蓝绿
+                            color: '#5f29e8',    // 紫
+                            opacity: 0.01
+                        }
+                    };
+                });
 
-                        });
-                        
+                // option.series[0].data = regionsData;
+                // regionsData
+                // console.log(option)
+                // if(newFlash==true){ // 第一次刷新设置历史数据  否则只刷新今日数据
+                //                 myChart.setOption(option);
+                //             }else{
+                //                 // myChart.appendData({
+                //                 //     seriesIndex: 0,   // 金色线 今日新增
+                //                 //     data: option.series[0].data
+                //                 // });
+                //                 // console.log('商户数据不刷新')
+                //             }
+                // newFlash=false;
+                // myChart.setOption(option);
+                console.log(regionsData)
+                myChart.setOption({
+                    series: [{ //商户 
+                        name: 'hos',
+                        data: regionsData
+                    }]
+                }, {
+                        notMerge: false,
+                        lazyUpdate: true,
+                        silent: true
+                    });
+
+            });
+
         };
 
 
-        function addNewData(debitinfodata){
+        function addNewData(debitinfodata) {
             var data = []
             console.log(debitinfodata.debitid)
             console.log(debitinfodata.shopid)
             data.push({
-                    coords: debitinfodata.coords,
-                    lineStyle: {
-                        opacity: 0.02,
-                        width: 0.1,
-                        // color: color,  // 金色
-                        color: [0.8, 0.8, 0.3, 0.8]   //金色
-                        // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                    },
-                    value: 20 // Math.random() * 200
-                });
+                coords: debitinfodata.coords,
+                lineStyle: {
+                    opacity: 0.02,
+                    width: 0.1,
+                    // color: color,  // 金色
+                    color: [0.8, 0.8, 0.3, 0.8]   //金色
+                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                },
+                value: 20 // Math.random() * 200
+            });
             myChart.appendData({
                 seriesIndex: seriesIndex,   // 金色线 今日新增
                 data: data
             });
-            seriesIndex=seriesIndex+1;
+            seriesIndex = seriesIndex + 1;
         };
 
 
-            // function getNew(){
-            //     // 获取实时新数据
-            //     myChart.appendData({
-            //         seriesIndex: 2,   // 金色线 今日新增
-            //         data: option.series[2].data
-            //     });
-                    
-            // }
+        // function getNew(){
+        //     // 获取实时新数据
+        //     myChart.appendData({
+        //         seriesIndex: 2,   // 金色线 今日新增
+        //         data: option.series[2].data
+        //     });
 
-            // mapbox.on('mousemove', function (e) {
-            //         document.getElementById('main').innerHTML =
-            //             // e.point is the x, y coordinates of the mousemove event relative
-            //             // to the top-left corner of the map
-            //             JSON.stringify(e.point) + '<br />' +
-            //             // e.lngLat is the longitude, latitude geographical position of the event
-            //             JSON.stringify(e.lngLat);
-            //     });
+        // }
 
-            // var marker = new mapboxgl.Marker({
-            //     draggable: true
-            // })
-            //     .setLngLat([108.3700, 29.351000])
-            //     .addTo(mapbox);
-            // mapbox.addControl(new mapboxgl.FullscreenControl());
+        // mapbox.on('mousemove', function (e) {
+        //         document.getElementById('main').innerHTML =
+        //             // e.point is the x, y coordinates of the mousemove event relative
+        //             // to the top-left corner of the map
+        //             JSON.stringify(e.point) + '<br />' +
+        //             // e.lngLat is the longitude, latitude geographical position of the event
+        //             JSON.stringify(e.lngLat);
+        //     });
 
-            //sse从服务器端推送数据
-            var eventSource = new EventSource('http://127.0.0.1:8098/subscribe',{ withCredentials: true });
-            eventSource.onmessage = function(e) {
-                // document.getElementById('main').innerHTML += e.data + '<br>';
-                // console.log(typeof(e.data))
-                console.log(e.data)
-                str_data = e.data.replace(/'/g,"\"")
-                // getData(e.data);
-                // console.log(typeof(marker))
-                if(typeof(marker)!="undefined"){
-                    marker.remove()
-                }
-                // console.log(typeof(popup))
-                if(typeof(popup)!="undefined"){
-                    popup.remove()
-                }
-                var json_data = JSON.parse(str_data)
+        // var marker = new mapboxgl.Marker({
+        //     draggable: true
+        // })
+        //     .setLngLat([108.3700, 29.351000])
+        //     .addTo(mapbox);
+        // mapbox.addControl(new mapboxgl.FullscreenControl());
 
-                
-                if (json_data.coords[0][0]!=0 && json_data.coords[1][0]!=0){
-                    console.log('valid geo add line.')
-                    addNewData(json_data)
-                    newDebitMark(json_data)
-					flyto(json_data.coords[1]) // hospital coords
-                    newDebitPopUp(json_data)
-                 }else{
-					 console.log('return invalid geo 0 0 no display line')
-				 }
-                // // flyToNextCity()
-                // Jarvis.say("新增进件"+e.data)
+        //sse从服务器端推送数据
+        var eventSource = new EventSource('http://127.0.0.1:8098/subscribe', { withCredentials: true });
+        eventSource.onmessage = function (e) {
+            // document.getElementById('main').innerHTML += e.data + '<br>';
+            // console.log(typeof(e.data))
+            console.log(e.data)
+            str_data = e.data.replace(/'/g, "\"")
+            // getData(e.data);
+            // console.log(typeof(marker))
+            if (typeof (marker) != "undefined") {
+                marker.remove()
             }
+            // console.log(typeof(popup))
+            if (typeof (popup) != "undefined") {
+                popup.remove()
+            }
+            var json_data = JSON.parse(str_data)
+
+
+            if (json_data.coords[0][0] != 0 && json_data.coords[1][0] != 0) {
+                console.log('valid geo add line.')
+                addNewData(json_data)
+                newDebitMark(json_data)
+                flyto(json_data.coords[1]) // hospital coords
+                newDebitPopUp(json_data)
+            } else {
+                console.log('return invalid geo 0 0 no display line')
+            }
+            // // flyToNextCity()
+            // Jarvis.say("新增进件"+e.data)
+        }
 
         getData();
         // setInterval(getData, 30000);
 
-        function addLineToMap(){
+        function addLineToMap() {
             // option.series[2].data.shift()
             option.series[2].data.push({
-                                        coords: [[115.1700+Math.random()*8,31.391000+Math.random()*2],[115.1700-Math.random()*7,31.391000-Math.random()*7]],
-                                        lineStyle: {
-                                            opacity: 0.01,
-                                            width: 2,
-                                            color: [0.8, 0.8, 0.3, 0.8]   //金色
-                                            // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
-                                        },
-                                        value: 20 // Math.random() * 200
-                                    });
+                coords: [[115.1700 + Math.random() * 8, 31.391000 + Math.random() * 2], [115.1700 - Math.random() * 7, 31.391000 - Math.random() * 7]],
+                lineStyle: {
+                    opacity: 0.01,
+                    width: 2,
+                    color: [0.8, 0.8, 0.3, 0.8]   //金色
+                    // color: echarts.color.modifyHSL('#5A94DF', Math.round(hStep * x))
+                },
+                value: 20 // Math.random() * 200
+            });
 
             // myChart.setOption(option,{
             //     notMerge:false,
@@ -568,48 +574,48 @@
                 seriesIndex: 2,
                 data: option.series[2].data
             });
-                // console.log('heheheheh')
+            // console.log('heheheheh')
 
         }
-        
+
 
         function newDebitPopUp(data) {
             var markerHeight = 50, markerRadius = 10, linearOffset = 25;
             var popupOffsets = {
-            'top': [0, 0],
-            'top-left': [0,0],
-            'top-right': [0,0],
-            'bottom': [0, -markerHeight],
-            'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-            'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-            'left': [markerRadius, (markerHeight - markerRadius) * -1],
-            'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                'top': [0, 0],
+                'top-left': [0, 0],
+                'top-right': [0, 0],
+                'bottom': [0, -markerHeight],
+                'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                'right': [-markerRadius, (markerHeight - markerRadius) * -1]
             };
-            window.popup = new mapboxgl.Popup({offset: popupOffsets, className: 'popup'})
-            //.setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
-            .setLngLat(data.coords[1])
-            .setHTML(data.final_input_time+"<br>商户："+data.abbreviation+"<br>客户："+data.user_name+"（"+data.gender+data.age+"岁）<br>用户地址："+data.user_address+"<br>商户地址："+data.shop_address
-                    +"<br>项目："+data.oper_nm+"<br>申请金额："+data.consumer_apply_amount+"元（"+data.month_count+"期）<br>申请评级："+data.grade_class+"")
-            .addTo(mapbox);
+            window.popup = new mapboxgl.Popup({ offset: popupOffsets, className: 'popup' })
+                //.setLngLat([initLng+Math.random()*0.8,initLat+Math.random()*0.72])
+                .setLngLat(data.coords[1])
+                .setHTML(data.final_input_time + "<br>商户：" + data.abbreviation + "<br>客户：" + data.user_name + "（" + data.gender + data.age + "岁）<br>用户地址：" + data.user_address + "<br>商户地址：" + data.shop_address
+                    + "<br>项目：" + data.oper_nm + "<br>申请金额：" + data.consumer_apply_amount + "元（" + data.month_count + "期）<br>申请评级：" + data.grade_class + "")
+                .addTo(mapbox);
         }
 
-        function newDebitMark(data){
-            window.marker = new mapboxgl.Marker({className:'marker'})
-            .setLngLat(data.coords[0])
-            .addTo(mapbox);
+        function newDebitMark(data) {
+            window.marker = new mapboxgl.Marker({ className: 'marker' })
+                .setLngLat(data.coords[0])
+                .addTo(mapbox);
         }
 
-		
-		function executeTask(h, m, s, task) {
-			var timerId = setInterval(function () {
-					var date = new Date();
-					if (date.getHours() === h && date.getMinutes() === m && date.getSeconds() === s){
-							location.reload()	
-						}
-					}, 3599)    
-		}
 
-		executeTask(1, 30, 10) // reload at 1:30:10
+        function executeTask(h, m, s, task) {
+            var timerId = setInterval(function () {
+                var date = new Date();
+                if (date.getHours() === h && date.getMinutes() === m && date.getSeconds() === s) {
+                    location.reload()
+                }
+            }, 3599)
+        }
+
+        executeTask(1, 30, 10) // reload at 1:30:10
 
         // setInterval(function (){ 
         //     addLineToMap()
@@ -620,99 +626,116 @@
         //     myChart.resize();
         // });
 
-        var Jarvis
-        function speechRecoStart(){
-            Jarvis = new Artyom();
-                // Jarvis.on(["上海"]).then(function(i){
-                //     console.log("跳转到上海...");
-                //     flyToNextCity('Shanghai')
-                //     // Jarvis.say("你好")
-                //     // document.getElementById('main').innerHTML += i + '<br>';
-                // });
-                Jarvis.addCommands([
-                    {
-                        indexes:["上海"],
-                        action:function(){
-                            Jarvis.say("ok")
-                            console.log("正在转到...");
-                            flyToNextCity('Shanghai');
-                        }
-                    },
-                    {
-                        indexes:["全国"],
-                        action:function(){
-                            Jarvis.say("好的")
-                            console.log("回到全国...");
-                            backtochina();
-                        }
-                    },
-                    {
-                        indexes:["中国"],
-                        action:function(){
-                            Jarvis.say("好的")
-                            console.log("回到全国...");
-                            backtochina();
-                        }
-                    },
-                    {
-                        indexes:["国家"],
-                        action:function(){
-                            Jarvis.say("好的")
-                            console.log("回到全国...");
-                            backtochina();
-                        }
-                    },
-                    {
-                        indexes:["日本"],
-                        action:function(){
-                            Jarvis.say("好的")
-                            console.log("回到全国...");
-                            backtochina();
-                        }
-                    }
-                ]);
+        // $(function(){
 
-                Jarvis.initialize({
-                lang:"zh-Hans",   //   fix occasionally change to Cantoness see https://docs.ourcodeworld.com/projects/artyom-js/documentation/methods/getlanguage
-                continuous:true,
-                debug:true, // Show what recognizes in the Console
-                listen:true, // Start listening after this
+        // })
+        function speechRecoStart() {
+
+            // Jarvis.on(["上海"]).then(function(i){
+            //     console.log("跳转到上海...");
+            //     flyToNextCity('Shanghai')
+            //     // Jarvis.say("你好")
+            //     // document.getElementById('main').innerHTML += i + '<br>';
+            // });
+            const Jarvis = new Artyom();
+            const indexes = areas.map(area => area.name)
+            Jarvis.addCommands([
+                {
+                    indexes,
+                    action: function (i) {
+                        Jarvis.say(`正在转到${indexes[i]}`)
+                        console.log("正在转到...");
+                        flyToLoaction(indexes[i]);
+                    }
+                },
+                // {
+                //     indexes: ["全国"],
+                //     action: function () {
+                //         Jarvis.say("好的")
+                //         console.log("回到全国...");
+                //         backtochina();
+                //     }
+                // },
+                // {
+                //     indexes: ["中国"],
+                //     action: function () {
+                //         Jarvis.say("好的")
+                //         console.log("回到全国...");
+                //         backtochina();
+                //     }
+                // },
+                // {
+                //     indexes: ["国家"],
+                //     action: function () {
+                //         Jarvis.say("好的")
+                //         console.log("回到全国...");
+                //         backtochina();
+                //     }
+                // },
+                // {
+                //     indexes: ["日本"],
+                //     action: function () {
+                //         Jarvis.say("好的")
+                //         console.log("回到全国...");
+                //         backtochina();
+                //     }
+                // }
+            ]);
+
+            Jarvis.initialize({
+                lang: "zh-CN",   //   fix occasionally change to Cantoness see https://docs.ourcodeworld.com/projects/artyom-js/documentation/methods/getlanguage
+                continuous: true,
+                debug: true, // Show what recognizes in the Console
+                listen: true, // Start listening after this
                 // speed:0.9, // Talk a little bit slow
                 // mode:"quick" // This parameter is not required as it will be normal by default
             });
-    }
+        }
 
-    function gestStart(){
-      document.addEventListener('gest', function(gesture) {
-          if (gesture.left) {
-              $('#navMenu').trigger('click');
-          } else if (gesture.right) {
-              $('#navMenu').trigger('click');
-          }
-      }, false);
+        function flyToLoaction(cityname) {
+            const city = areas.find(i => i.name === cityname);
+            const location = city ? city.location : null;
+            if (location && location.lat && location.lng) {
+                mapbox.flyTo({
+                    center: [location.lng, location.lat],
+                    zoom: 8,
+                    speed: 0.3,
+                    curve: 2
+                });
+            }
+        }
 
-      gest.start();
-    }  
+        function gestStart() {
+            document.addEventListener('gest', function (gesture) {
+                if (gesture.left) {
+                    $('#navMenu').trigger('click');
+                } else if (gesture.right) {
+                    $('#navMenu').trigger('click');
+                }
+            }, false);
+
+            gest.start();
+        }
 
 
-    $(function(){
-        console.log("---------------------------------------")
-        speechRecoStart()
-        gestStart()
-    });
-
-    $(function() {
-        $("#navMenu").click(function() {
-         //$(".nav").toggleClass("small");
-          if ($(".nav").hasClass("small")) {
-            $(".nav").removeClass("small");
-          } else {
-            $(".nav").addClass("small");
-          }
+        $(function () {
+            console.log("---------------------------------------")
+            speechRecoStart()
+            gestStart()
         });
-      });
 
-  
+        $(function () {
+            $("#navMenu").click(function () {
+                //$(".nav").toggleClass("small");
+                if ($(".nav").hasClass("small")) {
+                    $(".nav").removeClass("small");
+                } else {
+                    $(".nav").addClass("small");
+                }
+            });
+        });
+
+
 
     </script>
 </body>
